@@ -5,7 +5,7 @@ const Header = () => {
         <div className="container-fluid">
           <a className="navbar-brand" href="/">
             <svg
-              class="__2OnJ __2utV PH_l"
+              className="__2OnJ __2utV PH_l"
               viewBox="0 0 370 244"
               xmlns="http://www.w3.org/2000/svg"
               //   xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -31,8 +31,8 @@ const Header = () => {
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
             <ul className="navbar-nav me-auto mb-2 mb-lg-0">
               <li className="nav-item">
-                <div class="input-group">
-                  <span class="input-group-text bg-white border-end-0">
+                <div className="input-group">
+                  <span className="input-group-text bg-white border-end-0">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -47,7 +47,7 @@ const Header = () => {
                   </span>
                   <input
                     type="search"
-                    class="form-control border-start-0"
+                    className="form-control border-start-0"
                     placeholder="Search..."
                   />
                 </div>

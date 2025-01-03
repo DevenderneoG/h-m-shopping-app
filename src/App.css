@@ -85,8 +85,8 @@
 }
 
 .btn-bg-red {
-  background-color: #c9002e !important;
-  border-color: #c9002e !important;
+  background-color: #000000 !important;
+  border-color: #000 !important;
 }
 .btn-bg-red:hover {
   background-color: #222 !important;

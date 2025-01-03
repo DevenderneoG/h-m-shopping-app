@@ -1,10 +1,18 @@
 import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+import useFetch from "../useFetch";
 const ProductSlider = () => {
+  const { data, loading, error } = useFetch(
+    "https://shoping-app-backend-iota.vercel.app/categories"
+  );
+  console.log(data, '---------------');
+
   return (
     <div className="container py-5">
       <div className="row">
         <div className="col-md-12">
+        {loading && <p>Loading...</p>}
+        {error && <p>An error occured while fetching users.</p>}
           <Swiper
             slidesPerView={3}
             spaceBetween={30}
@@ -20,7 +28,24 @@ const ProductSlider = () => {
             modules={[Autoplay, Navigation, Pagination]}
             className="mySwiper"
           >
-            <SwiperSlide>
+            {data?.categories && data.categories.length > 0 &&
+              data?.categories?.map((category, index) => (
+                <SwiperSlide key={index}>
+                  <a href={`/products/categories/${category}`}>
+                    <div className="card-Content card border-0">
+                      <img
+                        src="https://image.hm.com/assets/hm/65/b7/65b7b874dcbc4e100fb0952c15938f5e258af495.jpg?imwidth=564"
+                        alt="logo"
+                        className="img-fluid"
+                      />
+                      <div className="card-Content-Text">
+                        <h2>{category}</h2>
+                      </div>
+                    </div>
+                  </a>
+                </SwiperSlide>
+              ))}
+            {/* <SwiperSlide>
               <a href="/products">
                 <div className="card-Content card border-0">
                   <img
@@ -89,13 +114,12 @@ const ProductSlider = () => {
                   </div>
                 </div>
               </a>
-            </SwiperSlide>
+            </SwiperSlide> */}
           </Swiper>
         </div>
       </div>
     </div>
   );
 };
-
 
 export default ProductSlider;

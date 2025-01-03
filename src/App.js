@@ -42,7 +42,7 @@ function App() {
                 <h2 className="text-white mb-4">New arrivals Mens</h2>
                 <button
                   type="button"
-                  class="btn btn-primary rounded-pill px-3 btn-bg-red"
+                  className="btn btn-primary rounded-pill px-3 btn-bg-red"
                 >
                   Shop
                 </button>
@@ -63,7 +63,7 @@ function App() {
                 <h2 className="text-white mb-4">New arrivals Womens</h2>
                 <button
                   type="button"
-                  class="btn btn-primary rounded-pill px-3 btn-bg-red"
+                  className="btn btn-primary rounded-pill px-3 btn-bg-red"
                 >
                   Shop
                 </button>
@@ -84,7 +84,7 @@ function App() {
                 <h2 className="text-white mb-4">New arrivals Mens</h2>
                 <button
                   type="button"
-                  class="btn btn-primary rounded-pill px-3 btn-bg-red"
+                  className="btn btn-primary rounded-pill px-3 btn-bg-red"
                 >
                   Shop
                 </button>
