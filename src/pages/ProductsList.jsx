@@ -5,171 +5,177 @@ import useFetch from "../useFetch";
 
 const ProductsList = () => {
   const categoriesId = useParams();
+  // const { data, loading, error } = useFetch(
+  //   `https://shoping-app-backend-iota.vercel.app/categories/${categoriesId.category}`
+  // );
   const { data, loading, error } = useFetch(
-    `https://shoping-app-backend-iota.vercel.app/categories/${categoriesId.category}`
+    `https://shoping-app-backend-iota.vercel.app/products`
   );
 
+  console.log(data, "--==--");
   return (
     <>
       <Header />
       <div className="container-fluid py-5">
         <div className="row">
           <div className="col-lg-2">
-            <div className="d-flex align-items-center justify-content-between mb-4">
-              <h6 className="fw-bolder">Filters</h6>
-              <span>Clear</span>
-            </div>
-            <hr />
-            <div className="mb-4">
-              <h6 className="fw-bolder">Rating</h6>
-              <label
-                htmlFor="customPriceRange"
-                className="form-label d-flex align-items-center justify-content-between"
-              >
-                <span>0 </span> <span>5 </span>
-              </label>
-              <input
-                type="range"
-                className="form-range"
-                min="0"
-                max="5"
-                step="0"
-                id="customPriceRange"
-                list="priceTickmarks"
-              />
+            <div className="sticky-top categories-sidebar">
+              <div className="d-flex align-items-center justify-content-between mb-4 sticky-top">
+                <h6 className="fw-bolder">Filters</h6>
+                <span>Clear</span>
+              </div>
+              <hr />
+              <div className="mb-4">
+                <h6 className="fw-bolder">Rating</h6>
+                <label
+                  htmlFor="customPriceRange"
+                  className="form-label d-flex align-items-center justify-content-between"
+                >
+                  <span>0 </span> <span>5 </span>
+                </label>
+                <input
+                  type="range"
+                  className="form-range"
+                  min="0"
+                  max="5"
+                  step="0"
+                  id="customPriceRange"
+                  list="priceTickmarks"
+                />
 
-              <datalist id="priceTickmarks">
-                <option value="0" label="0"></option>
-                <option value="3" label="1000"></option>
-                <option value="5" label="2000"></option>
-              </datalist>
-            </div>
-            <hr />
-            <div className="mb-4">
-              <h6 className="fw-bolder">Category</h6>
-              <ul className="list-unstyled category-list">
-                <li className="mb-2">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckChecked"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckChecked"
-                    >
-                      Mens
-                    </label>
-                  </div>
-                </li>
-                <li className="mb-2">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckChecked"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckChecked"
-                    >
-                      Women
-                    </label>
-                  </div>
-                  <a href="#" className=""></a>
-                </li>
-                <li className="mb-2">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="checkbox"
-                      value=""
-                      id="flexCheckChecked"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexCheckChecked"
-                    >
-                      Kids
-                    </label>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <hr />
-            <div className="mb-4">
-              <h6 className="fw-bolder">Rating</h6>
-              <ul className="list-unstyled category-list">
-                <li className="mb-2">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault1"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDefault1"
-                    >
-                      4 Starts & above
-                    </label>
-                  </div>
-                </li>
-                <li className="mb-2">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault1"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDefault1"
-                    >
-                      3 Starts & above
-                    </label>
-                  </div>
-                </li>
-                <li className="mb-2">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault1"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDefault1"
-                    >
-                      2 Starts & above
-                    </label>
-                  </div>
-                  <a href="#" className=""></a>
-                </li>
-                <li className="mb-2">
-                  <div className="form-check">
-                    <input
-                      className="form-check-input"
-                      type="radio"
-                      name="flexRadioDefault"
-                      id="flexRadioDefault1"
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="flexRadioDefault1"
-                    >
-                      1 Starts & above
-                    </label>
-                  </div>
-                  <a href="#" className=""></a>
-                </li>
-              </ul>
+                <datalist id="priceTickmarks">
+                  <option value="0" label="0"></option>
+                  <option value="3" label="1000"></option>
+                  <option value="5" label="2000"></option>
+                </datalist>
+              </div>
+              <hr />
+              <div className="mb-4">
+                <h6 className="fw-bolder">Category</h6>
+                <ul className="list-unstyled category-list">
+                  <li className="mb-2">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckChecked"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckChecked"
+                      >
+                        Mens
+                      </label>
+                    </div>
+                  </li>
+                  <li className="mb-2">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckChecked"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckChecked"
+                      >
+                        Women
+                      </label>
+                    </div>
+                    <a href="#" className=""></a>
+                  </li>
+                  <li className="mb-2">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        value=""
+                        id="flexCheckChecked"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexCheckChecked"
+                      >
+                        Kids
+                      </label>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+              <hr />
+              <div className="mb-4">
+                <h6 className="fw-bolder">Rating</h6>
+                <ul className="list-unstyled category-list">
+                  <li className="mb-2">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexRadioDefault1"
+                      >
+                        4 Starts & above
+                      </label>
+                    </div>
+                  </li>
+                  <li className="mb-2">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexRadioDefault1"
+                      >
+                        3 Starts & above
+                      </label>
+                    </div>
+                  </li>
+                  <li className="mb-2">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexRadioDefault1"
+                      >
+                        2 Starts & above
+                      </label>
+                    </div>
+                    <a href="#" className=""></a>
+                  </li>
+                  <li className="mb-2">
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="flexRadioDefault"
+                        id="flexRadioDefault1"
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="flexRadioDefault1"
+                      >
+                        1 Starts & above
+                      </label>
+                    </div>
+                    <a href="#" className=""></a>
+                  </li>
+                </ul>
+              </div>
             </div>
             {/* <hr />
             <div className="mb-4">
@@ -209,12 +215,15 @@ const ProductsList = () => {
               <h2 className="mb-4">View All</h2>
               <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
                 {loading && (
-                  <div class="spinner-border text-danger d-flex justify-center" role="status">
+                  <div
+                    class="spinner-border text-danger d-flex justify-center"
+                    role="status"
+                  >
                     <span class="visually-hidden">Loading...</span>
                   </div>
                 )}
-                {data?.data?.category?.map((product) => (
-                  <div className="card border-0 rounded-0" key={product.id}>
+                {data?.map((product) => (
+                  <div className="card border-0 rounded-0 product-card" key={product.id}>
                     <div className="position-relative">
                       <img
                         src={

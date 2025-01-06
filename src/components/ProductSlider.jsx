@@ -5,14 +5,18 @@ const ProductSlider = () => {
   const { data, loading, error } = useFetch(
     "https://shoping-app-backend-iota.vercel.app/categories"
   );
-  console.log(data, '---------------');
+  console.log(data, "---------------");
 
   return (
     <div className="container py-5">
       <div className="row">
         <div className="col-md-12">
-        {loading && <p>Loading...</p>}
-        {error && <p>An error occured while fetching users.</p>}
+          {loading && (
+            <div class="spinner-border text-danger" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          )}
+          {error && <p>An error occured while fetching users.</p>}
           <Swiper
             slidesPerView={3}
             spaceBetween={30}
@@ -28,7 +32,8 @@ const ProductSlider = () => {
             modules={[Autoplay, Navigation, Pagination]}
             className="mySwiper"
           >
-            {data?.categories && data.categories.length > 0 &&
+            {data?.categories &&
+              data.categories.length > 0 &&
               data?.categories?.map((category, index) => (
                 <SwiperSlide key={index}>
                   <a href={`/products/categories/${category}`}>
