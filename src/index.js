@@ -5,6 +5,8 @@ import App from "./App";
 // import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ProductsList from "./pages/ProductsList";
+import store from "./app/store";
+import { Provider } from "react-redux";
 
 const router = createBrowserRouter([
   {
@@ -14,13 +16,15 @@ const router = createBrowserRouter([
   {
     path: "/products/categories/:category",
     element: <ProductsList />,
-  }
+  },
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <Provider store={store}>
+      <RouterProvider router={router} />
+    </Provider>
   </React.StrictMode>
 );
 
