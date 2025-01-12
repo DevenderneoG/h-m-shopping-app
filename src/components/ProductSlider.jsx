@@ -2,37 +2,37 @@ import { Autoplay, Pagination, Navigation } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 import useFetch from "../useFetch";
 const ProductSlider = () => {
-  const { data, loading, error } = useFetch(
-    "https://shoping-app-backend-iota.vercel.app/categories"
-  );
-  console.log(data, "---------------");
+  // const { data, loading, error } = useFetch(
+  //   "https://shoping-app-backend-iota.vercel.app/categories"
+  // );
+  // console.log(data, "---------------");
 
   return (
     <div className="container py-5">
       <div className="row">
         <div className="col-md-12">
-          {loading && (
+          {/* {loading && (
             <div class="spinner-border text-danger" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
           )}
-          {error && <p>An error occured while fetching users.</p>}
+          {error && <p>An error occured while fetching users.</p>} */}
           <Swiper
             slidesPerView={3}
             spaceBetween={30}
             loop={true}
             navigation={true}
-            // autoplay={{
-            //   delay: 2500,
-            //   disableOnInteraction: false,
-            // }}
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
             pagination={{
               clickable: true,
             }}
             modules={[Autoplay, Navigation, Pagination]}
             className="mySwiper"
           >
-            {data?.categories &&
+            {/* {data?.categories &&
               data.categories.length > 0 &&
               data?.categories?.map((category, index) => (
                 <SwiperSlide key={index}>
@@ -49,8 +49,8 @@ const ProductSlider = () => {
                     </div>
                   </a>
                 </SwiperSlide>
-              ))}
-            {/* <SwiperSlide>
+              ))} */}
+            <SwiperSlide>
               <a href="/products">
                 <div className="card-Content card border-0">
                   <img
@@ -119,7 +119,7 @@ const ProductSlider = () => {
                   </div>
                 </div>
               </a>
-            </SwiperSlide> */}
+            </SwiperSlide>
           </Swiper>
         </div>
       </div>
