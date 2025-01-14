@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
 import {
   fetchProducts,
   fetchCategories,
@@ -10,15 +11,24 @@ import Footer from "../components/Footer";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
+  const { category } = useParams();
   const { products, categories, status, error, selectedCategories } =
     useSelector((state) => state.product);
 
   const [selectedRating, setSelectedRating] = useState(null);
+  const [sortPrice, setSortPrice] = useState(null);
+
+  console.log(category, "category");
 
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchCategories());
-  }, [dispatch]);
+
+    if (category) {
+      dispatch(setSelectedCategories([category])); // Set the category filter from the URL
+    }
+
+  }, [dispatch, category]);
 
   const handleCategoryChange = (e) => {
     const { value, checked } = e.target;
@@ -42,12 +52,22 @@ const ProductsList = () => {
 
     return categoryMatch && ratingMatch;
   });
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
+    if (sortPrice === 'lowToHigh') {
+      return a.price - b.price;
+    } else if (sortPrice === 'highToLow') {
+      return b.price - a.price;
+    }
+    return 0; // Default to no sorting
+  });
   console.log(selectedRating);
   console.log(filteredProducts);
 
   const handleClear = () => {
     dispatch(setSelectedCategories([]));
     setSelectedRating(null);
+    setSortPrice(null);
   };
 
   return (
@@ -118,7 +138,7 @@ const ProductsList = () => {
               <hr />
               <div className="mb-4">
                 <h6 className="fw-bolder">Sort by Price</h6>
-                <ul className="list-unstyled category-list">
+                {/* <ul className="list-unstyled category-list">
                   <li>
                     <div className="form-check">
                       <input
@@ -147,6 +167,40 @@ const ProductsList = () => {
                       </label>
                     </div>
                   </li>
+                </ul> */}
+                <ul className="list-unstyled category-list">
+                  <li>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="price"
+                        value="lowToHigh"
+                        id="lowToHigh"
+                        onChange={() => setSortPrice('lowToHigh')}
+                        checked={sortPrice === 'lowToHigh'}
+                      />
+                      <label className="form-check-label" htmlFor="lowToHigh">
+                        Low to High
+                      </label>
+                    </div>
+                  </li>
+                  <li>
+                    <div className="form-check">
+                      <input
+                        className="form-check-input"
+                        type="radio"
+                        name="price"
+                        value="highToLow"
+                        id="highToLow"
+                        onChange={() => setSortPrice('highToLow')}
+                        checked={sortPrice === 'highToLow'}
+                      />
+                      <label className="form-check-label" htmlFor="highToLow">
+                        High to Low
+                      </label>
+                    </div>
+                  </li>
                 </ul>
               </div>
             </div>
@@ -162,8 +216,8 @@ const ProductsList = () => {
                 )}
                 {error && <p>{error}</p>}
 
-                {filteredProducts.length > 0 ? (
-                  filteredProducts.map((product) => (
+                {sortedProducts.length > 0 ? (
+                  sortedProducts.map((product) => (
                     <div
                       className="card border-0 rounded-0 product-card"
                       key={product._id}
@@ -181,7 +235,6 @@ const ProductsList = () => {
                       <div className="card-body">
                         <h5 className="card-title">{product.title}</h5>
                         <p className="card-text">{product.price}</p>
-                        {/* <p className="card-text">{product.rating}</p> */}
                         <div className="d-flex gap-2">
                           <a className="btn btn-primary btn-bg-red cursur-pointer">
                             Add To Cart
@@ -191,7 +244,7 @@ const ProductsList = () => {
                     </div>
                   ))
                 ) : (
-                  <p></p>
+                  <p>No products found</p>
                 )}
               </div>
             </div>
