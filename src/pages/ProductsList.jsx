@@ -27,7 +27,6 @@ const ProductsList = () => {
     if (category) {
       dispatch(setSelectedCategories([category])); // Set the category filter from the URL
     }
-
   }, [dispatch, category]);
 
   const handleCategoryChange = (e) => {
@@ -54,9 +53,9 @@ const ProductsList = () => {
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortPrice === 'lowToHigh') {
+    if (sortPrice === "lowToHigh") {
       return a.price - b.price;
-    } else if (sortPrice === 'highToLow') {
+    } else if (sortPrice === "highToLow") {
       return b.price - a.price;
     }
     return 0; // Default to no sorting
@@ -138,36 +137,6 @@ const ProductsList = () => {
               <hr />
               <div className="mb-4">
                 <h6 className="fw-bolder">Sort by Price</h6>
-                {/* <ul className="list-unstyled category-list">
-                  <li>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="rating"
-                      />
-                      <label
-                        className="form-check-label"
-                      >
-                        low to high
-                      </label>
-                    </div>
-                  </li>
-                  <li>
-                    <div className="form-check">
-                      <input
-                        className="form-check-input"
-                        type="radio"
-                        name="rating"
-                      />
-                      <label
-                        className="form-check-label"
-                      >
-                        high to low
-                      </label>
-                    </div>
-                  </li>
-                </ul> */}
                 <ul className="list-unstyled category-list">
                   <li>
                     <div className="form-check">
@@ -177,8 +146,8 @@ const ProductsList = () => {
                         name="price"
                         value="lowToHigh"
                         id="lowToHigh"
-                        onChange={() => setSortPrice('lowToHigh')}
-                        checked={sortPrice === 'lowToHigh'}
+                        onChange={() => setSortPrice("lowToHigh")}
+                        checked={sortPrice === "lowToHigh"}
                       />
                       <label className="form-check-label" htmlFor="lowToHigh">
                         Low to High
@@ -193,8 +162,8 @@ const ProductsList = () => {
                         name="price"
                         value="highToLow"
                         id="highToLow"
-                        onChange={() => setSortPrice('highToLow')}
-                        checked={sortPrice === 'highToLow'}
+                        onChange={() => setSortPrice("highToLow")}
+                        checked={sortPrice === "highToLow"}
                       />
                       <label className="form-check-label" htmlFor="highToLow">
                         High to Low
@@ -222,18 +191,22 @@ const ProductsList = () => {
                       className="card border-0 rounded-0 product-card"
                       key={product._id}
                     >
-                      <div className="position-relative">
-                        <img
-                          src={
-                            product.productImageURL ||
-                            "https://example.com/default-image"
-                          }
-                          className="card-img-top rounded-0"
-                          alt="card-image"
-                        />
-                      </div>
+                      <a href={`/products/${product.category}/${product._id}`}>
+                        <div className="position-relative">
+                          <img
+                            src={
+                              product.productImageURL ||
+                              "https://example.com/default-image"
+                            }
+                            className="card-img-top rounded-0"
+                            alt="card-image"
+                          />
+                        </div>
+                      </a>
                       <div className="card-body">
-                        <h5 className="card-title">{product.title}</h5>
+                        <a href={`/products/${product.category}/${product._id}`} className="text-decoration-none text-black">
+                          <h5 className="card-title">{product.title}</h5>
+                        </a>
                         <p className="card-text">{product.price}</p>
                         <div className="d-flex gap-2">
                           <a className="btn btn-primary btn-bg-red cursur-pointer">

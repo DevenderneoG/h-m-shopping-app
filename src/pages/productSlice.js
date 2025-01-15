@@ -1,61 +1,3 @@
-// import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-// import axios from "axios";
-
-// export const fetchProducts = createAsyncThunk("products/fetchProducts", async () => {
-//   const response = await axios.get("https://shoping-app-backend-iota.vercel.app/products");
-//   console.log(response.data);
-//   return response.data;
-// });
-
-// export const fetchCategories = createAsyncThunk("products/fetchCategories", async () => {
-//   const response = await axios.get(`https://shoping-app-backend-iota.vercel.app/categories`);
-//   console.log(response.data);
-//   return response.data;
-// });
-
-
-
-// export const productSlice = createSlice({
-//   name: "product",
-//   initialState: {
-//     products: [],
-//     categories: [],
-//     status: "idle",
-//     error: null,
-//   },
-//   reducers: {},
-//   extraReducers: (builder) => {
-//     builder.addCase(fetchProducts.pending, (state) => {
-//       state.status = "loading";
-//     });
-//     builder.addCase(fetchProducts.fulfilled, (state, action) => {
-//       state.status = "succeeded";
-//       state.products = action.payload;
-//     });
-//     builder.addCase(fetchProducts.rejected, (state, action) => {
-//       state.status = "failed";
-//       state.error = action.error.message;
-//     });  
-//     builder.addCase(fetchCategories.pending, (state) => {
-//       state.status = "loading";
-//     })
-//     // builder.addCase(fetchCategories.fulfilled, (state, action) => {
-//     //   state.categories = action.payload;
-//     //   state.status = "succeeded";
-//     // })
-//     builder.addCase(fetchCategories.fulfilled, (state, action) => {
-//       state.categories = Array.isArray(action.payload) ? action.payload : [];
-//       state.status = "succeeded";
-//     });
-//     builder.addCase(fetchCategories.rejected, (state, action) => {
-//       state.status = "failed";
-//       state.error = action.error.message;
-//     });
-//   }
-// });
-
-// export default productSlice.reducer;
-
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -71,6 +13,14 @@ export const fetchCategories = createAsyncThunk("products/fetchCategories", asyn
   // console.log(response.data);
   return response.data.categories;
 });
+
+//fetch products  
+
+export const fetchProductsDetails = createAsyncThunk("products/fetchProductDetails", async (productId) => {
+  const response = await axios.get(`https://shoping-app-backend-iota.vercel.app/products/${productId}`);
+  return response.data;
+});
+
 
 export const productSlice = createSlice({
   name: "product",
@@ -119,7 +69,18 @@ export const productSlice = createSlice({
       .addCase(fetchCategories.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
-      });
+      })
+      .addCase(fetchProductsDetails.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchProductsDetails.fulfilled, (state, action) => {
+        state.status = "succeeded";        
+        state.selectedProduct = action.payload;
+      })
+      .addCase(fetchProductsDetails.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      })
   },
 });
 
