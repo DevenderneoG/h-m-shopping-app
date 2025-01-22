@@ -207,7 +207,7 @@ const ProductsList = () => {
                         <a href={`/products/${product.category}/${product._id}`} className="text-decoration-none text-black">
                           <h5 className="card-title">{product.title}</h5>
                         </a>
-                        <p className="card-text">{product.price}</p>
+                        <p className="card-text fw-bold">₹ {product.price}</p>
                         <div className="d-flex gap-2">
                           <a className="btn btn-primary btn-bg-red cursur-pointer">
                             Add To Cart
