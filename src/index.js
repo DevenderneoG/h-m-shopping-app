@@ -8,6 +8,7 @@ import ProductsList from "./pages/ProductsList";
 import store from "./app/store";
 import { Provider } from "react-redux";
 import ProductDetails from "./pages/ProductDetails";
+import Wishlist from "./pages/Wishlist";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,11 @@ const router = createBrowserRouter([
     path: "/products/:category/:productId",
     element: <ProductDetails />,
   },
+  {
+    path: "/wishlist",
+    element: <Wishlist />,
+  },
+  
 ]);
 
 const root = ReactDOM.createRoot(document.getElementById("root"));

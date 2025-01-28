@@ -5,6 +5,8 @@ import {
   fetchProducts,
   fetchCategories,
   setSelectedCategories,
+  addToWishlist,
+  removeFromWishlist
 } from "./productSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -12,7 +14,7 @@ import Footer from "../components/Footer";
 const ProductsList = () => {
   const dispatch = useDispatch();
   const { category } = useParams();
-  const { products, categories, status, error, selectedCategories } =
+  const { products, categories, status, error, selectedCategories, wishlist  } =
     useSelector((state) => state.product);
 
   const [selectedRating, setSelectedRating] = useState(null);
@@ -67,6 +69,18 @@ const ProductsList = () => {
     dispatch(setSelectedCategories([]));
     setSelectedRating(null);
     setSortPrice(null);
+  };
+
+  const isProductInWishlist = (productId) => {
+    return wishlist.some((item) => item._id === productId);
+  };
+
+  const handleWishlistToggle = (product) => {
+    if (isProductInWishlist(product._id)) {
+      dispatch(removeFromWishlist(product._id));
+    } else {
+      dispatch(addToWishlist(product));
+    }
   };
 
   return (
@@ -212,6 +226,16 @@ const ProductsList = () => {
                           <h5 className="card-title">{product.title}</h5>
                         </a>
                         <p className="card-text fw-bold">₹ {product.price}</p>
+                        <div className="d-flex gap-2">
+                          <button
+                            className="btn btn-primary btn-bg-red cursur-pointer"
+                            onClick={() => handleWishlistToggle(product)}
+                          >
+                            {isProductInWishlist(product._id)
+                              ? "Remove from Wishlist"
+                              : "Add to Wishlist"}
+                          </button>
+                        </div>
                         <div className="d-flex gap-2">
                           <a className="btn btn-primary btn-bg-red cursur-pointer">
                             Add To Cart

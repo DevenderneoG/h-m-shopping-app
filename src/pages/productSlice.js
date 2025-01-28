@@ -31,6 +31,7 @@ export const productSlice = createSlice({
     filteredProducts: [],
     status: "idle",
     error: null,
+    wishlist: [],
   },
   reducers: {   
     setSelectedCategories: (state, action) => {
@@ -44,7 +45,16 @@ export const productSlice = createSlice({
               action.payload.includes(product.categoryName) 
             );
     },
-    
+    addToWishlist: (state, action) => {
+      const product = action.payload;
+      if (!state.wishlist.some((item) => item._id === product._id)) {
+        state.wishlist.push(product);
+      }
+    },
+    removeFromWishlist: (state, action) => {
+      const productId = action.payload;
+      state.wishlist = state.wishlist.filter((item) => item._id !== productId);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -84,7 +94,8 @@ export const productSlice = createSlice({
   },
 });
 
-export const { setSelectedCategories } = productSlice.actions;
+export const { setSelectedCategories, addToWishlist,
+  removeFromWishlist } = productSlice.actions;
 
 export default productSlice.reducer;
 
