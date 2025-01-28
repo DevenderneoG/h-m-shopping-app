@@ -11,12 +11,12 @@ const ProductSlider = () => {
     <div className="container py-5">
       <div className="row">
         <div className="col-md-12">
-          {/* {loading && (
+          {loading && (
             <div className="spinner-border text-danger" role="status">
               <span className="visually-hidden">Loading...</span>
             </div>
           )}
-          {error && <p>An error occured while fetching users.</p>} */}
+          {error && <p>An error occured while fetching users.</p>}
           <Swiper
             slidesPerView={3}
             spaceBetween={30}

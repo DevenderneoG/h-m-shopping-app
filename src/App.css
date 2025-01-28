@@ -140,3 +140,37 @@
 /* .product-card {
   background-color: #e0e0e0;
 } */
+
+/* Product Details **/
+ul.size-list li button {
+  font-size: 13px;
+  color: #222;
+  font-weight: 500;
+  height: 40px;
+  width: 100%;
+  border: 1px solid #d0d0d0;
+  background: transparent;
+  min-width: 86px;
+  padding: 8px;
+}
+.delivery-icon svg {
+  width: 21px;
+  fill: #e50111;
+  height: 21px;
+}
+
+.delivery-icon {
+  width: 50px;
+  background: #ffcace;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.delivery-card h3 {
+  font-size: 16px;
+  font-weight: 600;
+  line-height: 19px;
+}

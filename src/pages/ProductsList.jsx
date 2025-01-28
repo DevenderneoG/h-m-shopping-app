@@ -177,14 +177,15 @@ const ProductsList = () => {
           <div className="col-lg-10 ps-4">
             <div className="">
               <h2 className="mb-4">View All</h2>
-              <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
+              <div className="text-center">
                 {status === "loading" && (
                   <div className="spinner-border text-danger" role="status">
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 )}
                 {error && <p>{error}</p>}
-
+              </div>
+              <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
                 {sortedProducts.length > 0 ? (
                   sortedProducts.map((product) => (
                     <div
@@ -204,7 +205,10 @@ const ProductsList = () => {
                         </div>
                       </a>
                       <div className="card-body">
-                        <a href={`/products/${product.category}/${product._id}`} className="text-decoration-none text-black">
+                        <a
+                          href={`/products/${product.category}/${product._id}`}
+                          className="text-decoration-none text-black"
+                        >
                           <h5 className="card-title">{product.title}</h5>
                         </a>
                         <p className="card-text fw-bold">₹ {product.price}</p>
@@ -217,7 +221,7 @@ const ProductsList = () => {
                     </div>
                   ))
                 ) : (
-                  <p>No products found</p>
+                  <p className="text-center d-block">No products found</p>
                 )}
               </div>
             </div>
