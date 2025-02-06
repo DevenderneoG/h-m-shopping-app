@@ -4,19 +4,18 @@ import { useParams } from "react-router-dom";
 import {
   fetchProducts,
   fetchCategories,
-  setSelectedCategories,
-  addToWishlist,
-  removeFromWishlist
+  setSelectedCategories 
 } from "./productSlice";
+import { addToWishlist, removeFromWishlist } from "./wishlistSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
   const { category } = useParams();
-  const { products, categories, status, error, selectedCategories, wishlist  } =
+  const { products, categories, status, error, selectedCategories  } =
     useSelector((state) => state.product);
-
+    const wishlistItems = useSelector((state) => state.wishlist.items);
   const [selectedRating, setSelectedRating] = useState(null);
   const [sortPrice, setSortPrice] = useState(null);
 
@@ -72,7 +71,7 @@ const ProductsList = () => {
   };
 
   const isProductInWishlist = (productId) => {
-    return wishlist.some((item) => item._id === productId);
+    return wishlistItems.some((item) => item._id === productId);
   };
 
   const handleWishlistToggle = (product) => {
@@ -82,6 +81,10 @@ const ProductsList = () => {
       dispatch(addToWishlist(product));
     }
   };
+
+  useEffect(() => {
+    console.log('Wishlist items after update:', wishlistItems); // Log updated wishlist
+  }, [wishlistItems]); 
 
   return (
     <>
@@ -226,9 +229,9 @@ const ProductsList = () => {
                           <h5 className="card-title">{product.title}</h5>
                         </a>
                         <p className="card-text fw-bold">₹ {product.price}</p>
-                        <div className="d-flex gap-2">
+                        <div className="d-flex gap-2">                         
                           <button
-                            className="btn btn-primary btn-bg-red cursur-pointer"
+                            className="btn btn-primary btn-bg-red cursor-pointer"
                             onClick={() => handleWishlistToggle(product)}
                           >
                             {isProductInWishlist(product._id)
