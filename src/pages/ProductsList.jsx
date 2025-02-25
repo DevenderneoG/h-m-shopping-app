@@ -1,32 +1,41 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import {
   fetchProducts,
   fetchCategories,
-  setSelectedCategories 
+  setSelectedCategories,
 } from "./productSlice";
-import { addToWishlist, removeFromWishlist } from "./wishlistSlice";
+import { addWishList, fetchWishlist } from "./wishlistSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
   const { category } = useParams();
-  const { products, categories, status, error, selectedCategories  } =
-    useSelector((state) => state.product);
-    const wishlistItems = useSelector((state) => state.wishlist.items);
-  const [selectedRating, setSelectedRating] = useState(null);
-  const [sortPrice, setSortPrice] = useState(null);
+  const {
+    products,
+    categories,
+    status: productStatus,
+    error: productError,
+    selectedCategories,
+  } = useSelector((state) => state.product);
+  const {
+    items: wishlistItems,
+    status: wishlistStatus,
+    error: wishlistError,
+  } = useSelector((state) => state.wishlist);
 
-  console.log(category, "category");
+  const [selectedRating, setSelectedRating] = React.useState(null);
+  const [sortPrice, setSortPrice] = React.useState(null);
 
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchCategories());
+    dispatch(fetchWishlist()); // Fetch wishlist on mount
 
     if (category) {
-      dispatch(setSelectedCategories([category])); // Set the category filter from the URL
+      dispatch(setSelectedCategories([category]));
     }
   }, [dispatch, category]);
 
@@ -34,7 +43,7 @@ const ProductsList = () => {
     const { value, checked } = e.target;
     const updatedCategories = checked
       ? [...selectedCategories, value]
-      : selectedCategories.filter((category) => category !== value);
+      : selectedCategories.filter((cat) => cat !== value);
     dispatch(setSelectedCategories(updatedCategories));
   };
 
@@ -46,23 +55,16 @@ const ProductsList = () => {
     const categoryMatch =
       selectedCategories.length === 0 ||
       selectedCategories.includes(product.category);
-
     const ratingMatch =
       selectedRating === null || product.rating >= selectedRating;
-
     return categoryMatch && ratingMatch;
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
-    if (sortPrice === "lowToHigh") {
-      return a.price - b.price;
-    } else if (sortPrice === "highToLow") {
-      return b.price - a.price;
-    }
-    return 0; // Default to no sorting
+    if (sortPrice === "lowToHigh") return a.price - b.price;
+    if (sortPrice === "highToLow") return b.price - a.price;
+    return 0;
   });
-  console.log(selectedRating);
-  console.log(filteredProducts);
 
   const handleClear = () => {
     dispatch(setSelectedCategories([]));
@@ -71,20 +73,12 @@ const ProductsList = () => {
   };
 
   const isProductInWishlist = (productId) => {
-    return wishlistItems.some((item) => item._id === productId);
+    return Array.isArray(wishlistItems) && wishlistItems.some((item) => item.productId._id === productId);
   };
 
-  const handleWishlistToggle = (product) => {
-    if (isProductInWishlist(product._id)) {
-      dispatch(removeFromWishlist(product._id));
-    } else {
-      dispatch(addToWishlist(product));
-    }
+  const handleAddToWishlist = (productId) => {
+    dispatch(addWishList({ productId }));
   };
-
-  useEffect(() => {
-    console.log('Wishlist items after update:', wishlistItems); // Log updated wishlist
-  }, [wishlistItems]); 
 
   return (
     <>
@@ -192,15 +186,15 @@ const ProductsList = () => {
             </div>
           </div>
           <div className="col-lg-10 ps-4">
-            <div className="">
+            <div>
               <h2 className="mb-4">View All</h2>
               <div className="text-center">
-                {status === "loading" && (
+                {productStatus === "loading" && (
                   <div className="spinner-border text-danger" role="status">
                     <span className="visually-hidden">Loading...</span>
                   </div>
                 )}
-                {error && <p>{error}</p>}
+                {productError && <p>{productError}</p>}
               </div>
               <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
                 {sortedProducts.length > 0 ? (
@@ -229,18 +223,24 @@ const ProductsList = () => {
                           <h5 className="card-title">{product.title}</h5>
                         </a>
                         <p className="card-text fw-bold">₹ {product.price}</p>
-                        <div className="d-flex gap-2">                         
+                        <div className="d-flex gap-2">
                           <button
                             className="btn btn-primary btn-bg-red cursor-pointer"
-                            onClick={() => handleWishlistToggle(product)}
+                            onClick={() => handleAddToWishlist(product._id)}
+                            disabled={wishlistStatus === "loading"}
                           >
                             {isProductInWishlist(product._id)
-                              ? "Remove from Wishlist"
+                              ? "In Wishlist"
+                              : wishlistStatus === "loading"
+                              ? "Adding..."
                               : "Add to Wishlist"}
                           </button>
                         </div>
-                        <div className="d-flex gap-2">
-                          <a className="btn btn-primary btn-bg-red cursur-pointer">
+                        {wishlistError && (
+                          <p className="text-danger">{wishlistError}</p>
+                        )}
+                        <div className="d-flex gap-2 mt-2">
+                          <a className="btn btn-primary btn-bg-red cursor-pointer">
                             Add To Cart
                           </a>
                         </div>

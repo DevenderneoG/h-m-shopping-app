@@ -1,11 +1,46 @@
-// Wishlist.js
-import React from "react";
-import { useSelector } from "react-redux";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchWishlist, removeWishList } from "../pages/wishlistSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const Wishlist = () => {
-  const { wishlist } = useSelector((state) => state.product);
+  const dispatch = useDispatch();
+  const { items: wishlistItems, status: wishlistStatus, error: wishlistError } = useSelector(
+    (state) => state.wishlist
+  );
+
+  useEffect(() => {
+    if (wishlistStatus === "idle") {
+      dispatch(fetchWishlist());
+    }
+  }, [dispatch, wishlistStatus]);
+
+  // Group wishlist items by productId._id and calculate quantities
+  const groupedWishlist = Array.isArray(wishlistItems)
+    ? wishlistItems.reduce((acc, item) => {
+        const productId = item.productId._id;
+        if (!acc[productId]) {
+          acc[productId] = {
+            product: item.productId,
+            quantity: 0,
+            itemIds: [], // Store all item _ids for this product
+          };
+        }
+        acc[productId].quantity += 1;
+        acc[productId].itemIds.push(item._id); // Add the wishlist item _id
+        return acc;
+      }, {})
+    : {};
+
+  const uniqueWishlistItems = Object.values(groupedWishlist);
+
+  const handleRemoveFromWishlist = (itemIds) => {
+    // Remove the first itemId from the list for this product
+    if (itemIds.length > 0) {
+      dispatch(removeWishList(itemIds[0])); // Delete the first instance
+    }
+  };
 
   return (
     <>
@@ -14,33 +49,49 @@ const Wishlist = () => {
         <div className="row">
           <div className="col-lg-12">
             <h2 className="mb-4">Your Wishlist</h2>
+            <div className="text-center">
+              {wishlistStatus === "loading" && (
+                <div className="spinner-border text-danger" role="status">
+                  <span className="visually-hidden">Loading...</span>
+                </div>
+              )}
+              {wishlistError && <p className="text-danger">{wishlistError}</p>}
+            </div>
             <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
-              {wishlist.length > 0 ? (
-                wishlist.map((product) => (
+              {uniqueWishlistItems.length > 0 ? (
+                uniqueWishlistItems.map((group) => (
                   <div
                     className="card border-0 rounded-0 product-card"
-                    key={product._id}
+                    key={group.product._id} // Use product _id as key
                   >
-                    <a href={`/products/${product.category}/${product._id}`}>
+                    <a href={`/products/${group.product.category}/${group.product._id}`}>
                       <div className="position-relative">
                         <img
                           src={
-                            product.productImageURL ||
+                            group.product.productImageURL ||
                             "https://example.com/default-image"
                           }
                           className="card-img-top rounded-0"
-                          alt="card-image"
+                          alt={group.product.title}
                         />
                       </div>
                     </a>
                     <div className="card-body">
                       <a
-                        href={`/products/${product.category}/${product._id}`}
+                        href={`/products/${group.product.category}/${group.product._id}`}
                         className="text-decoration-none text-black"
                       >
-                        <h5 className="card-title">{product.title}</h5>
+                        <h5 className="card-title">{group.product.title}</h5>
                       </a>
-                      <p className="card-text fw-bold">₹ {product.price}</p>
+                      <p className="card-text fw-bold">₹ {group.product.price}</p>
+                      <p className="card-text">Quantity: {group.quantity}</p>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => handleRemoveFromWishlist(group.itemIds)}
+                        disabled={wishlistStatus === "loading"}
+                      >
+                        Remove
+                      </button>
                     </div>
                   </div>
                 ))
