@@ -9,6 +9,7 @@ import store from "./app/store";
 import { Provider } from "react-redux";
 import ProductDetails from "./pages/ProductDetails";
 import Wishlist from "./pages/Wishlist";
+import CartPage from "./pages/Cart";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
   {
     path: "/wishlist",
     element: <Wishlist />,
+  },
+  {
+    path: "/cart",
+    element: <CartPage />,
   },
   
 ]);
