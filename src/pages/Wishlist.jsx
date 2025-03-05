@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 
 const Wishlist = () => {
   const dispatch = useDispatch();
-  const { items: wishlistItems, status: wishlistStatus, error: wishlistError } = useSelector(
+  const { items: wishlistItems, status: wishlistStatus, error: wishlistError, wishlistId } = useSelector(
     (state) => state.wishlist
   );
 
@@ -24,21 +24,24 @@ const Wishlist = () => {
           acc[productId] = {
             product: item.productId,
             quantity: 0,
-            itemIds: [], // Store all item _ids for this product
+            itemIds: [],
           };
         }
         acc[productId].quantity += 1;
-        acc[productId].itemIds.push(item._id); // Add the wishlist item _id
+        acc[productId].itemIds.push(item._id);
         return acc;
       }, {})
     : {};
 
+  console.log("Grouped Wishlist:", groupedWishlist);
   const uniqueWishlistItems = Object.values(groupedWishlist);
 
-  const handleRemoveFromWishlist = (itemIds) => {
-    // Remove the first itemId from the list for this product
-    if (itemIds.length > 0) {
-      dispatch(removeWishList(itemIds[0])); // Delete the first instance
+  const handleRemoveFromWishlist = (productId) => {
+    if (wishlistId) {
+      console.log(`Removing product with ID ${productId} from wishlist ${wishlistId}`);
+      dispatch(removeWishList({ wishlistId, productId }));
+    } else {
+      console.error("Wishlist ID not found");
     }
   };
 
@@ -62,7 +65,7 @@ const Wishlist = () => {
                 uniqueWishlistItems.map((group) => (
                   <div
                     className="card border-0 rounded-0 product-card"
-                    key={group.product._id} // Use product _id as key
+                    key={group.product._id}
                   >
                     <a href={`/products/${group.product.category}/${group.product._id}`}>
                       <div className="position-relative">
@@ -87,7 +90,7 @@ const Wishlist = () => {
                       <p className="card-text">Quantity: {group.quantity}</p>
                       <button
                         className="btn btn-danger btn-sm"
-                        onClick={() => handleRemoveFromWishlist(group.itemIds)}
+                        onClick={() => handleRemoveFromWishlist(group.product._id)} // Pass productId
                         disabled={wishlistStatus === "loading"}
                       >
                         Remove
