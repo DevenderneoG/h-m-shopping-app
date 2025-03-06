@@ -92,9 +92,12 @@ const cartSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchCart.fulfilled, (state, action) => {
+        // state.status = "succeeded";
+        // state.items = action.payload.items || [];
+        // state._id = action.payload._id;
         state.status = "succeeded";
-        state.items = action.payload.items || [];
-        state._id = action.payload._id;
+        state.items = Array.isArray(action.payload.items) ? action.payload.items : [];
+        state._id = action.payload._id || null; // Ensure _id is set from payload
       })
       .addCase(fetchCart.rejected, (state, action) => {
         state.status = "failed";
