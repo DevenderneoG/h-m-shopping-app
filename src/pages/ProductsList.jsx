@@ -9,6 +9,7 @@ import {
 import { addWishList, fetchWishlist } from "./wishlistSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { addToCart } from "./cartSlice";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
@@ -79,6 +80,10 @@ const ProductsList = () => {
   const handleAddToWishlist = (productId) => {
     dispatch(addWishList({ productId }));
   };
+
+  const handleAddToCart = (productId) => {
+    dispatch(addToCart({productId}));
+  }
 
   return (
     <>
@@ -240,9 +245,9 @@ const ProductsList = () => {
                           <p className="text-danger">{wishlistError}</p>
                         )}
                         <div className="d-flex gap-2 mt-2">
-                          <a className="btn btn-primary btn-bg-red cursor-pointer">
+                          <button className="btn btn-primary btn-bg-red cursor-pointer" onClick={() => handleAddToCart(product._id)}>
                             Add To Cart
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </div>

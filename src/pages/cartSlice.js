@@ -55,7 +55,7 @@ export const updateCartItem = createAsyncThunk(
   "cart/updateCartItem",
   async ({ cartId, productId, quantity }, { rejectWithValue, dispatch }) => {
     try {
-      const response = await axios.put(
+      const response = await axios.patch(
         `https://shoping-app-backend-iota.vercel.app/cart/${cartId}/item/${productId}`, // Adjust endpoint as needed
         { quantity }
       );

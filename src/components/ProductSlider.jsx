@@ -5,8 +5,7 @@ const ProductSlider = () => {
   const { data, loading, error } = useFetch(
     "https://shoping-app-backend-iota.vercel.app/categories"
   );
-  console.log(data, "---------------");
-
+  
   return (
     <div className="container py-5">
       <div className="row">

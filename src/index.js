@@ -10,6 +10,7 @@ import { Provider } from "react-redux";
 import ProductDetails from "./pages/ProductDetails";
 import Wishlist from "./pages/Wishlist";
 import CartPage from "./pages/Cart";
+import AddressCart from "./components/Address";
 
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/cart",
     element: <CartPage />,
+  },
+  {
+    path: "/address",
+    element: <AddressCart />,
   },
   
 ]);

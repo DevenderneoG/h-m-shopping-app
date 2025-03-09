@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchWishlist, removeWishList } from "../pages/wishlistSlice";
+import { fetchWishlist, addWishList, removeWishList } from "../pages/wishlistSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -16,10 +16,10 @@ const Wishlist = () => {
     }
   }, [dispatch, wishlistStatus]);
 
-  // Group wishlist items by productId._id and calculate quantities
   const groupedWishlist = Array.isArray(wishlistItems)
     ? wishlistItems.reduce((acc, item) => {
-        const productId = item.productId._id;
+        const productId = item?.productId?._id;
+        if (!productId) return acc;
         if (!acc[productId]) {
           acc[productId] = {
             product: item.productId,
@@ -33,64 +33,64 @@ const Wishlist = () => {
       }, {})
     : {};
 
-  console.log("Grouped Wishlist:", groupedWishlist);
   const uniqueWishlistItems = Object.values(groupedWishlist);
 
+  const handleAddToWishlist = (productId) => {
+    dispatch(addWishList({ productId }))
+      .unwrap()
+      .then(() => console.log("Added successfully"))
+      .catch((err) => console.error("Add failed:", err));
+  };
+
   const handleRemoveFromWishlist = (productId) => {
-    if (wishlistId) {
-      console.log(`Removing product with ID ${productId} from wishlist ${wishlistId}`);
-      dispatch(removeWishList({ wishlistId, productId }));
-    } else {
+    if (!wishlistId) {
       console.error("Wishlist ID not found");
+      return;
     }
+    dispatch(removeWishList({ wishlistId, productId }))
+      .unwrap()
+      .then(() => console.log("Removed successfully"))
+      .catch((err) => console.error("Remove failed:", err));
   };
 
   return (
     <>
       <Header />
-      <div className="container-fluid py-5">
+      <div className="container-fluid py-5 overflow-hidden">
         <div className="row">
           <div className="col-lg-12">
-            <h2 className="mb-4">Your Wishlist</h2>
-            <div className="text-center">
-              {wishlistStatus === "loading" && (
+            <h2 className="mb-4 text-center fw-bolder">Your Wishlist</h2>            
+            {wishlistStatus === "loading" && (
+              <div className="text-center">
                 <div className="spinner-border text-danger" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </div>
-              )}
-              {wishlistError && <p className="text-danger">{wishlistError}</p>}
-            </div>
-            <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
+              </div>
+            )}
+            {wishlistError && <p className="text-danger text-center">{wishlistError}</p>}
+            <div className="d-grid gap-1 row-gap-3 product-list">
               {uniqueWishlistItems.length > 0 ? (
                 uniqueWishlistItems.map((group) => (
-                  <div
-                    className="card border-0 rounded-0 product-card"
-                    key={group.product._id}
-                  >
+                  <div className="card border-0 rounded-0 product-card" key={group.product._id}>
                     <a href={`/products/${group.product.category}/${group.product._id}`}>
-                      <div className="position-relative">
-                        <img
-                          src={
-                            group.product.productImageURL ||
-                            "https://example.com/default-image"
-                          }
-                          className="card-img-top rounded-0"
-                          alt={group.product.title}
-                        />
-                      </div>
+                      <img
+                        src={group.product.productImageURL || "https://example.com/default-image"}
+                        className="card-img-top rounded-0"
+                        alt={group.product.title || "Product"}
+                      />
                     </a>
                     <div className="card-body">
                       <a
                         href={`/products/${group.product.category}/${group.product._id}`}
                         className="text-decoration-none text-black"
                       >
-                        <h5 className="card-title">{group.product.title}</h5>
+                        <h5 className="card-title">{group.product.title || "Untitled"}</h5>
                       </a>
-                      <p className="card-text fw-bold">₹ {group.product.price}</p>
+                      <p className="card-text fw-bold">₹ {group.product.price || "N/A"}</p>
                       <p className="card-text">Quantity: {group.quantity}</p>
                       <button
                         className="btn btn-danger btn-sm"
-                        onClick={() => handleRemoveFromWishlist(group.product._id)} // Pass productId
+                        onClick={() => handleRemoveFromWishlist(group.product._id)}
                         disabled={wishlistStatus === "loading"}
                       >
                         Remove
