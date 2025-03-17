@@ -23,7 +23,7 @@ const Header = () => {
 
   return (
     <>
-      <nav className="navbar navbar-expand-lg bg-white sticky-top shadow">
+      <nav className="navbar navbar-expand-lg bg-white sticky-top shadow-sm">
         <div className="container-fluid px-5">
           <a className="navbar-brand" href="/">
             <svg

@@ -9,13 +9,12 @@ import "swiper/css/pagination";
 import ProductSlider from "./components/ProductSlider";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import AddressCart from "./components/Address";
 
 function App() {
   return (
     <div className="App">
       <Header />
-      <AddressCart/>
+      {/* <AddressCart/> */}
       <ProductSlider />
       <div className="container-fluid py-5">
         <div className="row">
