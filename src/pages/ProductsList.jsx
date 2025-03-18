@@ -10,6 +10,7 @@ import { addWishList, fetchWishlist } from "./wishlistSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { addToCart } from "./cartSlice";
+import { ToastContainer, toast } from 'react-toastify';
 
 const ProductsList = () => {
   const dispatch = useDispatch();
@@ -77,17 +78,59 @@ const ProductsList = () => {
     return Array.isArray(wishlistItems) && wishlistItems.some((item) => item.productId._id === productId);
   };
 
+  // const handleAddToWishlist = (productId) => {
+  //   dispatch(addWishList({ productId }));
+  // };
+
+  // const handleAddToCart = (productId) => {
+  //   dispatch(addToCart({productId}));
+  // }
+
   const handleAddToWishlist = (productId) => {
-    dispatch(addWishList({ productId }));
+    if (isProductInWishlist(productId)) {
+      toast.info("Product already in wishlist!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    dispatch(addWishList({ productId })).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        toast.success("Product added to wishlist successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else if (result.meta.requestStatus === "rejected") {
+        toast.error("Failed to add product to wishlist!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    });
   };
 
   const handleAddToCart = (productId) => {
-    dispatch(addToCart({productId}));
-  }
+    dispatch(addToCart({ productId })).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        toast.success("Product added to cart successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else if (result.meta.requestStatus === "rejected") {
+        toast.error("Failed to add product to cart!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    });
+  };
 
+  
   return (
     <>
       <Header />
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="container-fluid py-5">
         <div className="row">
           <div className="col-lg-2">

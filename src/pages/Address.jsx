@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 function AddressDetail({ addresses, selectedAddress, setSelectedAddress }) {
   return (
     <div>
-      <h2>Delivery addresses ({addresses.length})</h2>
+      <h4 className="mb-4">Delivery addresses ({addresses.length})</h4>
       {addresses.map((addr, index) => (
         <div key={index} className="mb-3 d-flex align-items-center">
           <input
@@ -36,9 +36,11 @@ export default function AddressCart() {
   const [selectedAddress, setSelectedAddress] = useState(null);
 
   const dispatch = useDispatch();
-  const { address: addresses = [], status = "idle", error = null } = useSelector(
-    (state) => state.address || {}
-  );
+  const {
+    address: addresses = [],
+    status = "idle",
+    error = null,
+  } = useSelector((state) => state.address || {});
 
   useEffect(() => {
     if (status === "idle") {
@@ -51,16 +53,24 @@ export default function AddressCart() {
     const newAddress = { fullName, number, address, landmark, city, state };
     dispatch(addAddress(newAddress)).then((result) => {
       if (result.meta.requestStatus === "fulfilled") {
-        // Close the modal programmatically (Bootstrap JS required)
-        const modal = document.getElementById("exampleModal");
-        if (modal) modal.classList.remove("show");
-        // Reset form
         setFullName("");
         setNumber("");
         setAddress("");
         setLandmark("");
         setCity("");
         setState("");
+
+        const modal = document.getElementById("exampleModal");
+        if (modal) {
+          modal.classList.remove("show");
+          modal.style.display = "none";
+          document.body.classList.remove("modal-open");
+          const backdrop = document.querySelector(".modal-backdrop");
+          if (backdrop) backdrop.remove();
+        }
+
+        // Optional: Fetch addresses again if addAddress doesn't update the store directly
+        dispatch(fetchAddress());
       }
     });
   };

@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchWishlist, addWishList, removeWishList } from "../pages/wishlistSlice";
+import { ToastContainer, toast } from 'react-toastify';
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
@@ -35,12 +36,12 @@ const Wishlist = () => {
 
   const uniqueWishlistItems = Object.values(groupedWishlist);
 
-  const handleAddToWishlist = (productId) => {
-    dispatch(addWishList({ productId }))
-      .unwrap()
-      .then(() => console.log("Added successfully"))
-      .catch((err) => console.error("Add failed:", err));
-  };
+  // const handleAddToWishlist = (productId) => {
+  //   dispatch(addWishList({ productId }))
+  //     .unwrap()
+  //     .then(() => console.log("Added successfully"))
+  //     .catch((err) => console.error("Add failed:", err));
+  // };
 
   const handleRemoveFromWishlist = (productId) => {
     if (!wishlistId) {
@@ -49,13 +50,16 @@ const Wishlist = () => {
     }
     dispatch(removeWishList({ wishlistId, productId }))
       .unwrap()
-      .then(() => console.log("Removed successfully"))
-      .catch((err) => console.error("Remove failed:", err));
+      .then(() =>  toast.success("Product Removed successfully"))
+      .catch((err) => toast.error("Remove failed:", err));
   };
+
+  
 
   return (
     <>
       <Header />
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="container-fluid py-5 overflow-hidden">
         <div className="row">
           <div className="col-lg-12">
