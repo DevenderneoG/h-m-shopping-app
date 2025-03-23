@@ -309,7 +309,7 @@ const CartComponent = () => {
                     href="./address"
                     className="btn btn-primary btn-bg-red cursor-pointer"
                   >
-                    Proceed to Checkout
+                    Proceed to Buy
                   </a>
                 </div>
               </div>

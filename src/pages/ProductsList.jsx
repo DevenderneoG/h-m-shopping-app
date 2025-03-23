@@ -235,7 +235,7 @@ const ProductsList = () => {
           </div>
           <div className="col-lg-10 ps-4">
             <div>
-              <h2 className="mb-4">View All</h2>
+              {/* <h2 className="mb-4">View All</h2> */}
               <div className="text-center">
                 {productStatus === "loading" && (
                   <div className="spinner-border text-danger" role="status">

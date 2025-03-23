@@ -23,6 +23,35 @@ export const addAddress = createAsyncThunk(
   }
 );
 
+// Update an existing address
+export const updateAddress = createAsyncThunk(
+  "address/updateAddress",
+  async ({ id, addressData }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(`https://shoping-app-backend-iota.vercel.app/address/${id}`, addressData);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+// Remove item from cart
+export const removeAddress = createAsyncThunk(
+  "address/removeAddress",
+  async ({ id }, { rejectWithValue, dispatch }) => {
+    try {
+      const response = await axios.delete(
+        `https://shoping-app-backend-iota.vercel.app/address/${id}` 
+      );
+      dispatch(fetchAddress()); 
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Failed to remove from cart");
+    }
+  }
+);
+
 export const addressSlice = createSlice({
   name: "address",
   initialState: {
@@ -61,6 +90,16 @@ export const addressSlice = createSlice({
       .addCase(addAddress.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.payload || action.error.message;
+      })
+      // Update Address Cases
+      .addCase(updateAddress.fulfilled, (state, action) => {
+        const index = state.address.findIndex((addr) => addr._id === action.payload._id);
+        if (index !== -1) {
+          state.address[index] = action.payload;
+        }
+      })
+      .addCase(updateAddress.rejected, (state, action) => {
+        state.error = action.payload?.message || "Failed to update address";
       });
   },
 });
