@@ -10,7 +10,7 @@ import { addWishList, fetchWishlist } from "./wishlistSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { addToCart } from "./cartSlice";
-import { ToastContainer, toast } from 'react-toastify';
+import { ToastContainer, toast } from "react-toastify";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
@@ -21,6 +21,7 @@ const ProductsList = () => {
     status: productStatus,
     error: productError,
     selectedCategories,
+    searchTerm,
   } = useSelector((state) => state.product);
   const {
     items: wishlistItems,
@@ -59,7 +60,11 @@ const ProductsList = () => {
       selectedCategories.includes(product.category);
     const ratingMatch =
       selectedRating === null || product.rating >= selectedRating;
-    return categoryMatch && ratingMatch;
+    const searchMatch =
+      searchTerm === "" ||
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchTerm.toLowerCase());
+    return categoryMatch && ratingMatch && searchMatch;
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -75,7 +80,10 @@ const ProductsList = () => {
   };
 
   const isProductInWishlist = (productId) => {
-    return Array.isArray(wishlistItems) && wishlistItems.some((item) => item.productId._id === productId);
+    return (
+      Array.isArray(wishlistItems) &&
+      wishlistItems.some((item) => item.productId._id === productId)
+    );
   };
 
   // const handleAddToWishlist = (productId) => {
@@ -126,7 +134,6 @@ const ProductsList = () => {
     });
   };
 
-  
   return (
     <>
       <Header />
@@ -243,6 +250,9 @@ const ProductsList = () => {
                   </div>
                 )}
                 {productError && <p>{productError}</p>}
+                {searchTerm && filteredProducts.length === 0 && (
+                  <p>No products found matching "{searchTerm}"</p>
+                )}
               </div>
               <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
                 {sortedProducts.length > 0 ? (
@@ -288,7 +298,10 @@ const ProductsList = () => {
                           <p className="text-danger">{wishlistError}</p>
                         )}
                         <div className="d-flex gap-2 mt-2">
-                          <button className="btn btn-primary btn-bg-red cursor-pointer" onClick={() => handleAddToCart(product._id)}>
+                          <button
+                            className="btn btn-primary btn-bg-red cursor-pointer"
+                            onClick={() => handleAddToCart(product._id)}
+                          >
                             Add To Cart
                           </button>
                         </div>

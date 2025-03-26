@@ -128,12 +128,13 @@
 
 // export default Header;
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { fetchWishlist } from "./../pages/wishlistSlice";
 import { fetchCart } from "../pages/cartSlice";
 import { fetchUser } from "./../components/userSlice";
+import { setSearchTerm } from "../pages/productSlice"; // Add this import
 
 const Header = () => {
   const dispatch = useDispatch();
@@ -147,6 +148,7 @@ const Header = () => {
   const userStatus = useSelector((state) => state.user.status);
   const currentUser = users.length > 0 ? users[0] : null; // Assuming first user for now
 
+  const[searchQuery, setSearchQuery] = useState(""); // Add search state
   // console.log("currentUser", currentUser);
 
   useEffect(() => {
@@ -160,6 +162,13 @@ const Header = () => {
       dispatch(fetchUser());
     }
   }, [dispatch, wishlistStatus, cartStatus, userStatus]);
+
+  // Handle search input change
+  const handleSearch = (e) => {
+    const query = e.target.value;
+    setSearchQuery(query);
+    dispatch(setSearchTerm(query)); // Dispatch search term to Redux store
+  };
 
   return (
     <>
@@ -211,6 +220,8 @@ const Header = () => {
                     type="search"
                     className="form-control border-start-0"
                     placeholder="Search..."
+                    value={searchQuery}
+                    onChange={handleSearch}
                   />
                 </div>
               </li>
@@ -245,10 +256,18 @@ const Header = () => {
                           height={62}
                         />
                       </li>
-                      <li className="text-center py-2"><h4 className="text-black fw-bold mb-0">{currentUser.name}</h4></li>
-                      <li className="text-center py-2">{currentUser.email}</li>                      
-                      <li className="text-center py-2">{currentUser.phoneNumber}</li>                      
-                      <li className="text-center py-2">{currentUser.address}</li>                      
+                      <li className="text-center py-2">
+                        <h4 className="text-black fw-bold mb-0">
+                          {currentUser.name}
+                        </h4>
+                      </li>
+                      <li className="text-center py-2">{currentUser.email}</li>
+                      <li className="text-center py-2">
+                        {currentUser.phoneNumber}
+                      </li>
+                      <li className="text-center py-2">
+                        {currentUser.address}
+                      </li>
                     </ul>
                   </div>
                 </div>

@@ -32,6 +32,7 @@ export const productSlice = createSlice({
     status: "idle",
     error: null,
     wishlist: [],
+    searchTerm: '',
   },
   reducers: {   
     setSelectedCategories: (state, action) => {
@@ -54,6 +55,9 @@ export const productSlice = createSlice({
     removeFromWishlist: (state, action) => {
       const productId = action.payload;
       state.wishlist = state.wishlist.filter((item) => item._id !== productId);
+    },
+    setSearchTerm: (state, action) => {
+      state.searchTerm = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -95,7 +99,7 @@ export const productSlice = createSlice({
 });
 
 export const { setSelectedCategories, addToWishlist,
-  removeFromWishlist } = productSlice.actions;
+  removeFromWishlist, setSearchTerm } = productSlice.actions;
 
 export default productSlice.reducer;
 
