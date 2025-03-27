@@ -129,13 +129,13 @@ const Wishlist = () => {
                       </p>
                       <p className="card-text">Quantity: {group.quantity}</p>
                       <button
-                        className="btn btn-primary btn-bg-red cursor-pointer"
+                        className="btn btn-primary btn-bg-red cursor-pointer mb-lg-0 mb-3"
                         onClick={() => handleAddToCart(group.product._id)}
                       >
                         Add To Cart
                       </button>
                       <button
-                        className="btn btn-danger ms-2"
+                        className="btn btn-danger ms-lg-2"
                         onClick={() =>
                           handleRemoveFromWishlist(group.product._id)
                         }

@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchAddress, addAddress, updateAddress, removeAddress } from "./addressSlice";
+import {
+  fetchAddress,
+  addAddress,
+  updateAddress,
+  removeAddress,
+} from "./addressSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import { ToastContainer, toast } from "react-toastify";
@@ -12,7 +17,7 @@ function AddressDetail({
   selectedAddress,
   setSelectedAddress,
   onEdit,
-  onDelete
+  onDelete,
 }) {
   return (
     <div>
@@ -114,7 +119,7 @@ export default function AddressCart() {
             autoClose: 3000,
           });
           closeModal();
-          dispatch(fetchAddress()); // Refresh address list
+          dispatch(fetchAddress());
           resetForm();
         })
         .catch((err) => {
@@ -159,13 +164,15 @@ export default function AddressCart() {
             position: "top-right",
             autoClose: 3000,
           });
-          // fetchAddress already called in removeAddress thunk
         })
         .catch((err) => {
-          toast.error("Failed to delete address: " + (err.message || "Unknown error"), {
-            position: "top-right",
-            autoClose: 3000,
-          });
+          toast.error(
+            "Failed to delete address: " + (err.message || "Unknown error"),
+            {
+              position: "top-right",
+              autoClose: 3000,
+            }
+          );
         });
     }
   };
@@ -173,8 +180,6 @@ export default function AddressCart() {
   const handleProceed = () => {
     if (selectedAddress !== null) {
       const chosenAddress = addresses[selectedAddress];
-      console.log("Proceeding with:", chosenAddress);
-      // Navigate to checkout page with selected address as state
       navigate("/checkout", { state: { selectedAddress: chosenAddress } });
     } else {
       toast.warn("Please select an address to proceed!", {
@@ -183,19 +188,6 @@ export default function AddressCart() {
       });
     }
   };
-  
-  // const handleProceed = () => {
-  //   if (selectedAddress !== null) {
-  //     const chosenAddress = addresses[selectedAddress];
-  //     console.log("Proceeding with:", chosenAddress);
-  //     // TODO: Add logic to proceed with the selected address
-  //   } else {
-  //     toast.warn("Please select an address to proceed!", {
-  //       position: "top-right",
-  //       autoClose: 3000,
-  //     });
-  //   }
-  // };
 
   return (
     <div>
@@ -221,7 +213,7 @@ export default function AddressCart() {
                 <div className="mt-3">
                   <button
                     type="button"
-                    className="btn btn-outline-primary me-2"
+                    className="btn btn-outline-primary me-2 mb-lg-0 mb-3"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
                     onClick={resetForm}

@@ -233,7 +233,7 @@ const ProductsList = () => {
               </div>
             </div>
           </div>
-          <div className="col-lg-10 ps-4">
+          <div className="col-lg-10 ps-lg-4">
             <div>
               {/* <h2 className="mb-4">View All</h2> */}
               <div className="text-center">

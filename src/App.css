@@ -223,7 +223,7 @@ span.wishlistCount {
     width: 48%;
   }
   .navbar {
-    z-index: 1021;
+    z-index: 1021 !important;
   }
 }
 
@@ -235,10 +235,25 @@ span.wishlistCount {
   .navbar {
     justify-content: start;
   }
-  .product-card {
+  .product-card, .btn-danger {
     width: 100%;
   }
   .btn-bg-red {
     width: 100%;
   }
+  .product-card .card-body {
+    min-width: 100%;
+    max-width: 100%;
+  }
+  .navbar-nav .dropdown-menu {
+    position: absolute !important;
+}
+.product-list {
+  grid-template-columns: 1fr;
+}
+.product-card-img img {
+  min-width: 100%;
+  max-width: 100%;
+  height: 100%;
+}
 }

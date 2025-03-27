@@ -228,7 +228,7 @@ const Header = () => {
             </ul>
           </div>
           <ul className="navbar-nav mb-2 mb-lg-0 align-items-center flex-row gap-3">
-            <li className="nav-item">
+            <li className="nav-item d-lg-block d-none">
               {currentUser ? (
                 <div className="position-relative dropdown">
                   <div

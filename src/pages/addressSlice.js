@@ -2,10 +2,15 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 // Fetch Address
-export const fetchAddress = createAsyncThunk("address/fetchAddress", async () => {
-  const response = await axios.get("https://shoping-app-backend-iota.vercel.app/address");
-  return response.data;
-});
+export const fetchAddress = createAsyncThunk(
+  "address/fetchAddress",
+  async () => {
+    const response = await axios.get(
+      "https://shoping-app-backend-iota.vercel.app/address"
+    );
+    return response.data;
+  }
+);
 
 // Add Address
 export const addAddress = createAsyncThunk(
@@ -16,7 +21,7 @@ export const addAddress = createAsyncThunk(
         "https://shoping-app-backend-iota.vercel.app/address",
         addressData
       );
-      return response.data; // Assuming the backend returns the newly created address
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
     }
@@ -28,7 +33,10 @@ export const updateAddress = createAsyncThunk(
   "address/updateAddress",
   async ({ id, addressData }, { rejectWithValue }) => {
     try {
-      const response = await axios.put(`https://shoping-app-backend-iota.vercel.app/address/${id}`, addressData);
+      const response = await axios.put(
+        `https://shoping-app-backend-iota.vercel.app/address/${id}`,
+        addressData
+      );
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -42,9 +50,9 @@ export const removeAddress = createAsyncThunk(
   async ({ id }, { rejectWithValue, dispatch }) => {
     try {
       const response = await axios.delete(
-        `https://shoping-app-backend-iota.vercel.app/address/${id}` 
+        `https://shoping-app-backend-iota.vercel.app/address/${id}`
       );
-      dispatch(fetchAddress()); 
+      dispatch(fetchAddress());
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to remove from cart");
@@ -59,13 +67,7 @@ export const addressSlice = createSlice({
     status: "idle",
     error: null,
   },
-  reducers: {
-    // You can add any synchronous reducers here if needed
-    // For example:
-    // clearAddress: (state) => {
-    //   state.address = [];
-    // }
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchAddress.pending, (state) => {
@@ -85,7 +87,7 @@ export const addressSlice = createSlice({
       })
       .addCase(addAddress.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.address.push(action.payload); // Add the new address to the existing list
+        state.address.push(action.payload);
       })
       .addCase(addAddress.rejected, (state, action) => {
         state.status = "failed";
@@ -93,7 +95,9 @@ export const addressSlice = createSlice({
       })
       // Update Address Cases
       .addCase(updateAddress.fulfilled, (state, action) => {
-        const index = state.address.findIndex((addr) => addr._id === action.payload._id);
+        const index = state.address.findIndex(
+          (addr) => addr._id === action.payload._id
+        );
         if (index !== -1) {
           state.address[index] = action.payload;
         }
@@ -103,8 +107,5 @@ export const addressSlice = createSlice({
       });
   },
 });
-
-// Export actions if you add any reducers
-// export const { clearAddress } = addressSlice.actions;
 
 export default addressSlice.reducer;

@@ -1,17 +1,13 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Fetch Users
-// export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
-//   const response = await axios.get("https://shoping-app-backend-iota.vercel.app/customer");
-//   const data = await response.json();
-//   return data; // Assuming this returns an array of users
-// });
 export const fetchUser = createAsyncThunk("user/fetchUser", async () => {
-  const response = await fetch("https://shoping-app-backend-iota.vercel.app/customer"); // Replace with your actual endpoint
+  const response = await fetch(
+    "https://shoping-app-backend-iota.vercel.app/customer"
+  );
   if (!response.ok) throw new Error("Failed to fetch user");
   const data = await response.json();
-  console.log("API Response:", data); // Log the response to verify
+  console.log("API Response:", data);
   return data;
 });
 
@@ -30,7 +26,9 @@ export const userSlice = createSlice({
       })
       .addCase(fetchUser.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.users = Array.isArray(action.payload) ? action.payload : [action.payload]; // Store the array of users
+        state.users = Array.isArray(action.payload)
+          ? action.payload
+          : [action.payload];
       })
       .addCase(fetchUser.rejected, (state, action) => {
         state.status = "failed";
@@ -39,4 +37,4 @@ export const userSlice = createSlice({
   },
 });
 
-export default userSlice.reducer; // Corrected export
+export default userSlice.reducer;
