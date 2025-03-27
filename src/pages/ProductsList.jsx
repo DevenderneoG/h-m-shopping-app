@@ -9,6 +9,8 @@ import {
 import { addWishList, fetchWishlist } from "./wishlistSlice";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
+import { addToCart } from "./cartSlice";
+import { ToastContainer, toast } from "react-toastify";
 
 const ProductsList = () => {
   const dispatch = useDispatch();
@@ -19,6 +21,7 @@ const ProductsList = () => {
     status: productStatus,
     error: productError,
     selectedCategories,
+    searchTerm,
   } = useSelector((state) => state.product);
   const {
     items: wishlistItems,
@@ -32,7 +35,7 @@ const ProductsList = () => {
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchCategories());
-    dispatch(fetchWishlist()); // Fetch wishlist on mount
+    dispatch(fetchWishlist()); 
 
     if (category) {
       dispatch(setSelectedCategories([category]));
@@ -57,7 +60,11 @@ const ProductsList = () => {
       selectedCategories.includes(product.category);
     const ratingMatch =
       selectedRating === null || product.rating >= selectedRating;
-    return categoryMatch && ratingMatch;
+    const searchMatch =
+      searchTerm === "" ||
+      product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.category.toLowerCase().includes(searchTerm.toLowerCase());
+    return categoryMatch && ratingMatch && searchMatch;
   });
 
   const sortedProducts = [...filteredProducts].sort((a, b) => {
@@ -73,23 +80,64 @@ const ProductsList = () => {
   };
 
   const isProductInWishlist = (productId) => {
-    return Array.isArray(wishlistItems) && wishlistItems.some((item) => item.productId._id === productId);
+    return (
+      Array.isArray(wishlistItems) &&
+      wishlistItems.some((item) => item.productId._id === productId)
+    );
   };
+ 
 
   const handleAddToWishlist = (productId) => {
-    dispatch(addWishList({ productId }));
+    if (isProductInWishlist(productId)) {
+      toast.info("Product already in wishlist!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    dispatch(addWishList({ productId })).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        toast.success("Product added to wishlist successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else if (result.meta.requestStatus === "rejected") {
+        toast.error("Failed to add product to wishlist!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    });
+  };
+
+  const handleAddToCart = (productId) => {
+    dispatch(addToCart({ productId })).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        toast.success("Product added to cart successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else if (result.meta.requestStatus === "rejected") {
+        toast.error("Failed to add product to cart!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    });
   };
 
   return (
     <>
       <Header />
+      <ToastContainer position="top-right" autoClose={3000} />
       <div className="container-fluid py-5">
         <div className="row">
           <div className="col-lg-2">
             <div className="sticky-top categories-sidebar">
               <div className="d-flex align-items-center justify-content-between mb-4 sticky-top">
                 <h6 className="fw-bolder">Filters</h6>
-                <button onClick={handleClear}>Clear</button>
+                <button onClick={handleClear} className="bg-transparent border-0 text-decoration-underline">Clear</button>
               </div>
               <hr />
               <div className="mb-4">
@@ -185,9 +233,9 @@ const ProductsList = () => {
               </div>
             </div>
           </div>
-          <div className="col-lg-10 ps-4">
+          <div className="col-lg-10 ps-lg-4">
             <div>
-              <h2 className="mb-4">View All</h2>
+              {/* <h2 className="mb-4">View All</h2> */}
               <div className="text-center">
                 {productStatus === "loading" && (
                   <div className="spinner-border text-danger" role="status">
@@ -195,8 +243,11 @@ const ProductsList = () => {
                   </div>
                 )}
                 {productError && <p>{productError}</p>}
+                {searchTerm && filteredProducts.length === 0 && (
+                  <p>No products found matching "{searchTerm}"</p>
+                )}
               </div>
-              <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
+              <div className="d-flex flex-lg-row flex-md-row flex-column flex-wrap gap-1 row-gap-3 product-list mt-lg-0 mt-4">
                 {sortedProducts.length > 0 ? (
                   sortedProducts.map((product) => (
                     <div
@@ -240,9 +291,12 @@ const ProductsList = () => {
                           <p className="text-danger">{wishlistError}</p>
                         )}
                         <div className="d-flex gap-2 mt-2">
-                          <a className="btn btn-primary btn-bg-red cursor-pointer">
+                          <button
+                            className="btn btn-primary btn-bg-red cursor-pointer"
+                            onClick={() => handleAddToCart(product._id)}
+                          >
                             Add To Cart
-                          </a>
+                          </button>
                         </div>
                       </div>
                     </div>

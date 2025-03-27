@@ -1,14 +1,23 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchWishlist, removeWishList } from "../pages/wishlistSlice";
+import {
+  fetchWishlist,
+  addWishList,
+  removeWishList,
+} from "../pages/wishlistSlice";
+import { addToCart } from "./cartSlice";
+import { ToastContainer, toast } from "react-toastify";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 
 const Wishlist = () => {
   const dispatch = useDispatch();
-  const { items: wishlistItems, status: wishlistStatus, error: wishlistError } = useSelector(
-    (state) => state.wishlist
-  );
+  const {
+    items: wishlistItems,
+    status: wishlistStatus,
+    error: wishlistError,
+    wishlistId,
+  } = useSelector((state) => state.wishlist);
 
   useEffect(() => {
     if (wishlistStatus === "idle") {
@@ -16,78 +25,120 @@ const Wishlist = () => {
     }
   }, [dispatch, wishlistStatus]);
 
-  // Group wishlist items by productId._id and calculate quantities
   const groupedWishlist = Array.isArray(wishlistItems)
     ? wishlistItems.reduce((acc, item) => {
-        const productId = item.productId._id;
+        const productId = item?.productId?._id;
+        if (!productId) return acc;
         if (!acc[productId]) {
           acc[productId] = {
             product: item.productId,
             quantity: 0,
-            itemIds: [], // Store all item _ids for this product
+            itemIds: [],
           };
         }
         acc[productId].quantity += 1;
-        acc[productId].itemIds.push(item._id); // Add the wishlist item _id
+        acc[productId].itemIds.push(item._id);
         return acc;
       }, {})
     : {};
 
   const uniqueWishlistItems = Object.values(groupedWishlist);
 
-  const handleRemoveFromWishlist = (itemIds) => {
-    // Remove the first itemId from the list for this product
-    if (itemIds.length > 0) {
-      dispatch(removeWishList(itemIds[0])); // Delete the first instance
+  // const handleAddToWishlist = (productId) => {
+  //   dispatch(addWishList({ productId }))
+  //     .unwrap()
+  //     .then(() => console.log("Added successfully"))
+  //     .catch((err) => console.error("Add failed:", err));
+  // };
+
+  const handleRemoveFromWishlist = (productId) => {
+    if (!wishlistId) {
+      console.error("Wishlist ID not found");
+      return;
     }
+    dispatch(removeWishList({ wishlistId, productId }))
+      .unwrap()
+      .then(() => toast.success("Product Removed successfully"))
+      .catch((err) => toast.error("Remove failed:", err));
+  };
+
+  const handleAddToCart = (productId) => {
+    dispatch(addToCart({ productId })).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        toast.success("Product added to cart successfully!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      } else if (result.meta.requestStatus === "rejected") {
+        toast.error("Failed to add product to cart!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
+      }
+    });
   };
 
   return (
     <>
       <Header />
-      <div className="container-fluid py-5">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <div className="container-fluid py-5 overflow-hidden">
         <div className="row">
           <div className="col-lg-12">
-            <h2 className="mb-4">Your Wishlist</h2>
-            <div className="text-center">
-              {wishlistStatus === "loading" && (
+            <h2 className="mb-4 text-center fw-bolder">Your Wishlist</h2>
+            {wishlistStatus === "loading" && (
+              <div className="text-center">
                 <div className="spinner-border text-danger" role="status">
                   <span className="visually-hidden">Loading...</span>
                 </div>
-              )}
-              {wishlistError && <p className="text-danger">{wishlistError}</p>}
-            </div>
-            <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
+              </div>
+            )}
+            {wishlistError && (
+              <p className="text-danger text-center">{wishlistError}</p>
+            )}
+            <div className="d-grid gap-1 row-gap-3 product-list">
               {uniqueWishlistItems.length > 0 ? (
                 uniqueWishlistItems.map((group) => (
                   <div
                     className="card border-0 rounded-0 product-card"
-                    key={group.product._id} // Use product _id as key
+                    key={group.product._id}
                   >
-                    <a href={`/products/${group.product.category}/${group.product._id}`}>
-                      <div className="position-relative">
-                        <img
-                          src={
-                            group.product.productImageURL ||
-                            "https://example.com/default-image"
-                          }
-                          className="card-img-top rounded-0"
-                          alt={group.product.title}
-                        />
-                      </div>
+                    <a
+                      href={`/products/${group.product.category}/${group.product._id}`}
+                    >
+                      <img
+                        src={
+                          group.product.productImageURL ||
+                          "https://example.com/default-image"
+                        }
+                        className="card-img-top rounded-0"
+                        alt={group.product.title || "Product"}
+                      />
                     </a>
                     <div className="card-body">
                       <a
                         href={`/products/${group.product.category}/${group.product._id}`}
                         className="text-decoration-none text-black"
                       >
-                        <h5 className="card-title">{group.product.title}</h5>
+                        <h5 className="card-title">
+                          {group.product.title || "Untitled"}
+                        </h5>
                       </a>
-                      <p className="card-text fw-bold">₹ {group.product.price}</p>
+                      <p className="card-text fw-bold">
+                        ₹ {group.product.price || "N/A"}
+                      </p>
                       <p className="card-text">Quantity: {group.quantity}</p>
                       <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleRemoveFromWishlist(group.itemIds)}
+                        className="btn btn-primary btn-bg-red cursor-pointer mb-lg-0 mb-3"
+                        onClick={() => handleAddToCart(group.product._id)}
+                      >
+                        Add To Cart
+                      </button>
+                      <button
+                        className="btn btn-danger ms-lg-2"
+                        onClick={() =>
+                          handleRemoveFromWishlist(group.product._id)
+                        }
                         disabled={wishlistStatus === "loading"}
                       >
                         Remove

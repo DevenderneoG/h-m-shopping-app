@@ -9,6 +9,9 @@ import store from "./app/store";
 import { Provider } from "react-redux";
 import ProductDetails from "./pages/ProductDetails";
 import Wishlist from "./pages/Wishlist";
+import CartPage from "./pages/Cart";
+import AddressCart from "./pages/Address";
+import Checkout from "./pages/Checkout";
 
 const router = createBrowserRouter([
   {
@@ -27,6 +30,18 @@ const router = createBrowserRouter([
     path: "/wishlist",
     element: <Wishlist />,
   },
+  {
+    path: "/cart",
+    element: <CartPage />,
+  },
+  {
+    path: "/address",
+    element: <AddressCart />,
+  },
+  {
+    path: "/checkout",
+    element: <Checkout />,
+  }
   
 ]);
 

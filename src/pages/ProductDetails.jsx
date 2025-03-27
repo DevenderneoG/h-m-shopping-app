@@ -4,7 +4,9 @@ import Header from "../components/Header";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsDetails } from "./productSlice";
 import { useEffect, useState } from "react";
-import { addToCart } from "./cartSlice"; 
+import { addToCart, fetchCart } from "./cartSlice";
+import { ToastContainer, toast } from "react-toastify";
+import { addWishList, fetchWishlist } from "./wishlistSlice";
 
 const ProductDetails = () => {
   const [quantity, setQuantity] = useState(1);
@@ -14,8 +16,17 @@ const ProductDetails = () => {
     (state) => state.product
   );
 
+  const {
+    items: wishlistItems,
+    status: wishlistStatus,
+    error: wishlistError,
+  } = useSelector(
+    (state) => state.wishlist || { items: [], status: "idle", error: null }
+  );
+
   useEffect(() => {
     dispatch(fetchProductsDetails(productId));
+    dispatch(fetchWishlist());
   }, [dispatch, productId]);
 
   const getStarColor = (index) => {
@@ -31,24 +42,17 @@ const ProductDetails = () => {
     }
   };
 
-  const discount = 50;
-  const discountPrice =
-    selectedProduct?.price - (selectedProduct?.price * discount) / 100;
+  // const discount = 50;
+  // const discountPrice =
+  //   selectedProduct?.price - (selectedProduct?.price * discount) / 100;
 
-  if (status === "loading") {
-    return <div>Loading...</div>;
-  }
-
-  if (status === "failed") {
-    return <div>Error: {error}</div>;
-  }
-
-  if (!selectedProduct) {
-    return <div>Product not found</div>;
-  }
+  const discount = selectedProduct?.discount || 0;
+  const discountPrice = selectedProduct?.price
+    ? selectedProduct.price - (selectedProduct.price * discount) / 100
+    : 0;
 
   const handleQuantityChange = (newQuantity) => {
-    if (newQuantity < 1) return; // Ensure quantity doesn't go below 1
+    if (newQuantity < 1) return; 
     setQuantity(newQuantity);
   };
 
@@ -56,16 +60,86 @@ const ProductDetails = () => {
     if (selectedProduct) {
       dispatch(
         addToCart({
-          ...selectedProduct,
+          productId: selectedProduct._id,
           quantity,
         })
-      );
+      )
+        .unwrap()
+        .then(() => {
+          toast.success("Product added to cart successfully!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          
+          dispatch(fetchCart());
+        })
+        .catch((err) => {
+          toast.error("Failed to add product to cart!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
     }
   };
-  console.log(selectedProduct);
+
+  const isProductInWishlist = () => {
+    return (
+      Array.isArray(wishlistItems) &&
+      wishlistItems.some((item) => item.productId?._id === selectedProduct?._id)
+    );
+  };
+
+  const handleAddToWishlist = () => {
+    if (isProductInWishlist()) {
+      toast.info("Product already in wishlist!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    if (selectedProduct) {
+      dispatch(addWishList({ productId: selectedProduct._id }))
+        .unwrap()
+        .then(() => {
+          toast.success("Product added to wishlist successfully!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+          dispatch(fetchWishlist()); 
+        })
+        .catch((err) => {
+          toast.error("Failed to add product to wishlist!", {
+            position: "top-right",
+            autoClose: 3000,
+          });
+        });
+    }
+  };
+  
+
+  if (status === "loading") {
+    return (
+      <div className="text-center">
+        <div className="spinner-border text-danger" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  if (status === "failed") {
+    return <div className="text-center">Error: {error}</div>;
+  }
+
+  if (!selectedProduct) {
+    return <div className="text-center">Product not found</div>;
+  }
+
   return (
     <>
       <Header />
+      <ToastContainer position="top-right" autoClose={3000} />
       <section className="py-5">
         <div className="container">
           <div className="row">
@@ -107,28 +181,53 @@ const ProductDetails = () => {
                     </svg>
                   ))}
                 </p>
-                <div className="d-flex align-items-center">
+                {/* <div className="d-flex align-items-center">
                   <span className="fs-2 fw-bolder">₹{discountPrice}</span>
                   {""}
                   <span className="fs-4 text-black-50 ms-3">
                     <del>₹{selectedProduct.price}</del>
                   </span>
+                </div> */}
+                <div className="d-flex align-items-center">
+                  <span className="fs-2 fw-bolder">
+                    ₹{discountPrice.toFixed(2)}
+                  </span>
+                  {discount > 0 && (
+                    <span className="fs-4 text-black-50 ms-3">
+                      <del>₹{selectedProduct.price}</del>
+                    </span>
+                  )}
                 </div>
-                <h3 className="fs-4 fw-bold text-black-50">50% off</h3>
+                {discount > 0 && (
+                  <h3 className="fs-4 fw-bold text-black-50">
+                    {discount}% off
+                  </h3>
+                )}
+               
                 <div className="mb-3">
-                  <span className="mb-2">Quantity:</span>
-                  <div>
-                    <button onClick={() => handleQuantityChange(quantity - 1)}>
+                  <span className="mb-2 d-block">Quantity:</span>
+                  <div className="d-flex align-items-center gap-2">
+                    <button
+                      className="btn btn-outline-dark"
+                      onClick={() => handleQuantityChange(quantity - 1)}
+                      disabled={quantity <= 1}
+                    >
                       -
                     </button>
                     <input
                       type="number"
                       value={quantity}
                       onChange={(e) =>
-                        handleQuantityChange(parseInt(e.target.value))
+                        handleQuantityChange(parseInt(e.target.value) || 1)
                       }
+                      min="1"
+                      className="form-control text-center"
+                      style={{ width: "60px" }}
                     />
-                    <button onClick={() => handleQuantityChange(quantity + 1)}>
+                    <button
+                      className="btn btn-outline-dark"
+                      onClick={() => handleQuantityChange(quantity + 1)}
+                    >
                       +
                     </button>
                   </div>
@@ -136,22 +235,38 @@ const ProductDetails = () => {
                 <div className="mb-3">
                   <p>Sizes</p>
                   <ul className="size-list d-flex gap-3 list-unstyled">
-                    <li>
-                      <button>S</button>
-                    </li>
-                    <li>
-                      <button>M</button>
-                    </li>
-                    <li>
-                      <button>L</button>
-                    </li>
-                    <li>
-                      <button>XL</button>
-                    </li>
-                    <li>
-                      <button>XXL</button>
-                    </li>
+                    {selectedProduct.sizes &&
+                    selectedProduct.sizes.length > 0 ? (
+                      selectedProduct.sizes.map((size) => (
+                        <li key={size}>
+                          <button className="btn btn-outline-dark">
+                            {size}
+                          </button>
+                        </li>
+                      ))
+                    ) : (
+                      <li>No Sizes Available</li>
+                    )}
                   </ul>
+                </div>
+                <div className="mb-3 d-flex flex-lg-row flex-column align-content-center gap-3">
+                  <button
+                    className="btn btn-primary btn-bg-red cursor-pointer"
+                    onClick={handleAddToCart}
+                  >
+                    Add to Cart
+                  </button>
+                  <button
+                    className="btn btn-outline-info cursor-pointer"
+                    onClick={handleAddToWishlist}
+                    disabled={wishlistStatus === "loading"}
+                  >
+                    {isProductInWishlist()
+                      ? "In Wishlist"
+                      : wishlistStatus === "loading"
+                      ? "Adding..."
+                      : "Add to Wishlist"}
+                  </button>
                 </div>
                 <hr />
                 <div className="d-flex justify-content-between">
@@ -203,22 +318,16 @@ const ProductDetails = () => {
                 <hr />
                 <div className="mb-3">
                   <h4 className="mb-3">Description</h4>
-                  <p>
-                    STYLE REDEFINED: Elevate your look with our versatile Bomber
-                    Jacket.
-                  </p>
-                  <p>
-                    STYLE REDEFINED: Elevate your look with our versatile Bomber
-                    Jacket.
-                  </p>
-                  <p>
-                    STYLE REDEFINED: Elevate your look with our versatile Bomber
-                    Jacket.
-                  </p>
-                  <p>
-                    STYLE REDEFINED: Elevate your look with our versatile Bomber
-                    Jacket.
-                  </p>
+                  <ul>
+                    {selectedProduct.productDescription &&
+                    selectedProduct.productDescription > 0 ? (
+                      selectedProduct.productDescription.map((line, index) => (
+                        <li key={index}>{line}</li>
+                      ))
+                    ) : (
+                      <li>No Description Available</li>
+                    )}
+                  </ul>
                 </div>
               </div>
             </div>
