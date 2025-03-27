@@ -52,7 +52,7 @@ const ProductDetails = () => {
     : 0;
 
   const handleQuantityChange = (newQuantity) => {
-    if (newQuantity < 1) return; // Prevent quantity from going below 1
+    if (newQuantity < 1) return; 
     setQuantity(newQuantity);
   };
 
@@ -70,7 +70,7 @@ const ProductDetails = () => {
             position: "top-right",
             autoClose: 3000,
           });
-          // Fetch updated cart state after adding
+          
           dispatch(fetchCart());
         })
         .catch((err) => {
@@ -106,7 +106,7 @@ const ProductDetails = () => {
             position: "top-right",
             autoClose: 3000,
           });
-          dispatch(fetchWishlist()); // Refresh wishlist state
+          dispatch(fetchWishlist()); 
         })
         .catch((err) => {
           toast.error("Failed to add product to wishlist!", {
@@ -116,7 +116,7 @@ const ProductDetails = () => {
         });
     }
   };
-  // console.log("product", selectedProduct);
+  
 
   if (status === "loading") {
     return (
@@ -203,7 +203,7 @@ const ProductDetails = () => {
                     {discount}% off
                   </h3>
                 )}
-                {/* <h3 className="fs-4 fw-bold text-black-50">50% off</h3> */}
+               
                 <div className="mb-3">
                   <span className="mb-2 d-block">Quantity:</span>
                   <div className="d-flex align-items-center gap-2">
@@ -249,7 +249,7 @@ const ProductDetails = () => {
                     )}
                   </ul>
                 </div>
-                <div className="mb-3 d-flex align-content-center gap-3">
+                <div className="mb-3 d-flex flex-lg-row flex-column align-content-center gap-3">
                   <button
                     className="btn btn-primary btn-bg-red cursor-pointer"
                     onClick={handleAddToCart}

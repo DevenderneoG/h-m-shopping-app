@@ -35,7 +35,7 @@ const ProductsList = () => {
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchCategories());
-    dispatch(fetchWishlist()); // Fetch wishlist on mount
+    dispatch(fetchWishlist()); 
 
     if (category) {
       dispatch(setSelectedCategories([category]));
@@ -85,14 +85,7 @@ const ProductsList = () => {
       wishlistItems.some((item) => item.productId._id === productId)
     );
   };
-
-  // const handleAddToWishlist = (productId) => {
-  //   dispatch(addWishList({ productId }));
-  // };
-
-  // const handleAddToCart = (productId) => {
-  //   dispatch(addToCart({productId}));
-  // }
+ 
 
   const handleAddToWishlist = (productId) => {
     if (isProductInWishlist(productId)) {
@@ -144,7 +137,7 @@ const ProductsList = () => {
             <div className="sticky-top categories-sidebar">
               <div className="d-flex align-items-center justify-content-between mb-4 sticky-top">
                 <h6 className="fw-bolder">Filters</h6>
-                <button onClick={handleClear}>Clear</button>
+                <button onClick={handleClear} className="bg-transparent border-0 text-decoration-underline">Clear</button>
               </div>
               <hr />
               <div className="mb-4">
@@ -254,7 +247,7 @@ const ProductsList = () => {
                   <p>No products found matching "{searchTerm}"</p>
                 )}
               </div>
-              <div className="d-flex flex-lg-row flex-column flex-wrap gap-1 row-gap-3 product-list">
+              <div className="d-flex flex-lg-row flex-md-row flex-column flex-wrap gap-1 row-gap-3 product-list mt-lg-0 mt-4">
                 {sortedProducts.length > 0 ? (
                   sortedProducts.map((product) => (
                     <div

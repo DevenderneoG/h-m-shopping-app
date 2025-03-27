@@ -16,19 +16,21 @@ function App() {
       <Header />
       {/* <AddressCart/> */}
       <ProductSlider />
-      <div className="container-fluid py-5">
+      <div className="container-fluid py-lg-5 py-3">
         <div className="row">
           <div className="col-md-12">
-            <img
-              src="https://levi.in/cdn/shop/files/Desktop_1_b9d6344b-3d31-4d4d-a472-beacd6b9fff5.jpg?v=1734948744"
-              alt="logo"
-              className="w-100 img-fluid"
-            />
+            <div className="offer-banner">
+              <img
+                src="https://levi.in/cdn/shop/files/Desktop_1_b9d6344b-3d31-4d4d-a472-beacd6b9fff5.jpg?v=1734948744"
+                alt="logo"
+                className="w-100 img-fluid"
+              />
+            </div>
           </div>
         </div>
       </div>
-      <div className="container-fluid py-5">
-        <div className="row">
+      <div className="container-fluid py-lg-5 py-4">
+        <div className="row gy-lg-0 gy-4">
           <div className="col-md-4">
             <div className="position-relative">
               <div className="">
