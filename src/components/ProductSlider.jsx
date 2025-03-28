@@ -65,14 +65,14 @@ const ProductSlider = () => {
                       )}
                       {category === "sport" && (
                         <img
-                          src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/store-card-50-holiday-iphone-pro-202411_GEO_IN?wid=960&hei=1000&fmt=p-jpg&qlt=95&.v=1730393052722"
+                          src="https://image.hm.com/assets/hm/d3/ec/d3ecd69762aa3c5426632caa07895f0d2ea77e2b.jpg?imwidth=564"
                           alt="Home & Living Category"
                           className="img-fluid"
                         />
                       )}
                       {category === "home" && (
                         <img
-                          src="https://store.storeimages.cdn-apple.com/4668/as-images.apple.com/is/store-card-50-holiday-macbook-pro-202411?wid=960&hei=1000&fmt=p-jpg&qlt=95&.v=1728492746398"
+                          src="https://image.hm.com/assets/hm/c8/0b/c80b8bd7b7eebb693185bc8f5828d15e3e0d97ff.jpg?imwidth=564"
                           alt="Electronics Category"
                           className="img-fluid"
                         />

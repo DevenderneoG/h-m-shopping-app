@@ -148,7 +148,8 @@ const Header = () => {
   const userStatus = useSelector((state) => state.user.status);
   const currentUser = users.length > 0 ? users[0] : null; // Assuming first user for now
 
-  const[searchQuery, setSearchQuery] = useState(""); // Add search state
+  const [searchQuery, setSearchQuery] = useState(""); // Add search state
+  const [isOpen, setIsOpen] = useState(false);
   // console.log("currentUser", currentUser);
 
   useEffect(() => {
@@ -169,6 +170,12 @@ const Header = () => {
     setSearchQuery(query);
     dispatch(setSearchTerm(query)); // Dispatch search term to Redux store
   };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const reactions = ["Like", "Love", "Haha", "Wow", "Sad", "Angry"];
 
   return (
     <>
@@ -227,56 +234,7 @@ const Header = () => {
               </li>
             </ul>
           </div>
-          <ul className="navbar-nav mb-2 mb-lg-0 align-items-center flex-row gap-3">
-            <li className="nav-item d-lg-block d-none">
-              {currentUser ? (
-                <div className="position-relative dropdown">
-                  <div
-                    className="d-flex align-items-center dropdown-toggle pointer-cursor"
-                    data-bs-toggle="dropdown"
-                    aria-expanded="false"
-                  >
-                    <img
-                      src={currentUser?.imgUrl}
-                      alt={currentUser.name}
-                      className="img-fluid rounded-circle"
-                      width={32}
-                      height={32}
-                    />
-                    <span className="nav-link">
-                      {currentUser.name || currentUser.username || "User"}
-                    </span>
-                    <ul class="dropdown-menu py-3 px-4">
-                      <li className="text-center mb-3">
-                        <img
-                          src={currentUser?.imgUrl}
-                          alt={currentUser.name}
-                          className="img-fluid rounded-circle"
-                          width={62}
-                          height={62}
-                        />
-                      </li>
-                      <li className="text-center py-2">
-                        <h4 className="text-black fw-bold mb-0">
-                          {currentUser.name}
-                        </h4>
-                      </li>
-                      <li className="text-center py-2">{currentUser.email}</li>
-                      <li className="text-center py-2">
-                        {currentUser.phoneNumber}
-                      </li>
-                      <li className="text-center py-2">
-                        {currentUser.address}
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              ) : (
-                <button className="btn btn-primary btn-bg-red cursur-pointer">
-                  Login
-                </button>
-              )}
-            </li>
+          <ul className="navbar-nav mb-2 mb-lg-0 align-items-center flex-row gap-4">
             <li className="nav-item position-relative">
               <Link to="/wishlist">
                 <svg
@@ -311,6 +269,115 @@ const Header = () => {
               </Link>
               {Array.isArray(cartItems) && cartItems.length > 0 && (
                 <span className="wishlistCount">{cartItems.length}</span>
+              )}
+            </li>
+            <li className="nav-item d-lg-block d-none">
+              {currentUser ? (
+                // <div className="position-relative dropdown">
+                //   <div
+                //     className="d-flex align-items-center dropdown-toggle pointer-cursor"
+                //     data-bs-toggle="dropdown"
+                //     aria-expanded="false"
+                //   >
+                //     <img
+                //       src={currentUser?.imgUrl}
+                //       alt={currentUser.name}
+                //       className="img-fluid rounded-circle"
+                //       width={32}
+                //       height={32}
+                //     />
+                //     {/* <span className="nav-link">
+                //       {currentUser.name || currentUser.username || "User"}
+                //     </span> */}
+                //     <ul class="dropdown-menu py-3 px-4">
+                //       <li className="text-center mb-3">
+                //         <img
+                //           src={currentUser?.imgUrl}
+                //           alt={currentUser.name}
+                //           className="img-fluid rounded-circle"
+                //           width={62}
+                //           height={62}
+                //         />
+                //       </li>
+                //       <li className="text-center py-2">
+                //         <h4 className="text-black fw-bold mb-0">
+                //           {currentUser.name}
+                //         </h4>
+                //       </li>
+                //       <li className="text-center py-2">{currentUser.email}</li>
+                //       <li className="text-center py-2">
+                //         {currentUser.phoneNumber}
+                //       </li>
+                //       <li className="text-center py-2">
+                //         {currentUser.address}
+                //       </li>
+                //     </ul>
+                //   </div>
+                // </div>
+                <div className="user-reaction-container">
+                  <button className="reaction-toggle" onClick={toggleDropdown}>
+                    <img
+                      src="https://keenthemes.com/metronic/tailwind/react/demo1/media/avatars/300-2.png"
+                      alt={currentUser.name}
+                      className="img-fluid rounded-circle"
+                      width="{62}"
+                      height="{62}"
+                    />
+                  </button>
+                  {isOpen && (
+                    <ul className="reaction-list">
+                      <li className="border-bottom">
+                        <div class="d-flex align-items-center justify-content-between px-3 py-3 gap-1">
+                          <div class="d-flex items-items-center gap-3 profile-img">
+                            <img
+                              class="size-9 rounded-full border-2 border-success"
+                              src="https://keenthemes.com/metronic/tailwind/react/demo1/media/avatars/300-2.png"
+                              alt={currentUser.name}
+                              width="{62}"
+                              height="{62}"
+                            />
+                            <div class="text-start">
+                              <p className="text-sm fw-semibold mb-0">
+                                {currentUser.name}
+                              </p>
+                              <p className="text-xs fw-medium mb-0">
+                                {currentUser.email}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      </li>
+                      <li className="px-3 py-2 border-bottom">
+                        <p className="mb-0 list-items d-flex align-items-center gap-2">
+                          {" "}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                          >
+                            <path d="M164.9 24.6c-7.7-18.6-28-28.5-47.4-23.2l-88 24C12.1 30.2 0 46 0 64C0 311.4 200.6 512 448 512c18 0 33.8-12.1 38.6-29.5l24-88c5.3-19.4-4.6-39.7-23.2-47.4l-96-40c-16.3-6.8-35.2-2.1-46.3 11.6L304.7 368C234.3 334.7 177.3 277.7 144 207.3L193.3 167c13.7-11.2 18.4-30 11.6-46.3l-40-96z" />
+                          </svg>{" "}
+                          {currentUser.phoneNumber}
+                        </p>
+                      </li>
+                      <li className="px-3 py-2">
+                        <p className="mb-0 list-items d-flex align-items-center gap-2">
+                          {" "}
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 384 512"
+                          >
+                            <path d="M215.7 499.2C267 435 384 279.4 384 192C384 86 298 0 192 0S0 86 0 192c0 87.4 117 243 168.3 307.2c12.3 15.3 35.1 15.3 47.4 0zM192 128a64 64 0 1 1 0 128 64 64 0 1 1 0-128z" />
+                          </svg>
+                          {currentUser.address}
+                        </p>
+                      </li>
+                    </ul>
+                  )}
+                </div>
+              ) : (
+                <button className="btn btn-primary btn-bg-red cursur-pointer">
+                  Login
+                </button>
               )}
             </li>
           </ul>
