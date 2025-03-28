@@ -10,7 +10,6 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", async ()
 // Fetch Categories
 export const fetchCategories = createAsyncThunk("products/fetchCategories", async () => {
   const response = await axios.get("https://shoping-app-backend-iota.vercel.app/categories");
-  // console.log(response.data);
   return response.data.categories;
 });
 

@@ -35,7 +35,7 @@ const ProductsList = () => {
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchCategories());
-    dispatch(fetchWishlist()); 
+    dispatch(fetchWishlist());
 
     if (category) {
       dispatch(setSelectedCategories([category]));
@@ -85,7 +85,6 @@ const ProductsList = () => {
       wishlistItems.some((item) => item.productId._id === productId)
     );
   };
- 
 
   const handleAddToWishlist = (productId) => {
     if (isProductInWishlist(productId)) {
@@ -135,9 +134,14 @@ const ProductsList = () => {
         <div className="row">
           <div className="col-lg-2">
             <div className="sticky-top categories-sidebar">
-              <div className="d-flex align-items-center justify-content-between mb-4 sticky-top">
-                <h6 className="fw-bolder">Filters</h6>
-                <button onClick={handleClear} className="bg-transparent border-0 text-decoration-underline">Clear</button>
+              <div className="d-flex align-items-center justify-content-between mb-3 sticky-top">
+                <h6 className="fw-bolder mb-0">Filters</h6>
+                <button
+                  onClick={handleClear}
+                  className="bg-transparent border-0 text-decoration-underline"
+                >
+                  Clear
+                </button>
               </div>
               <hr />
               <div className="mb-4">
@@ -235,7 +239,6 @@ const ProductsList = () => {
           </div>
           <div className="col-lg-10 ps-lg-4">
             <div>
-              {/* <h2 className="mb-4">View All</h2> */}
               <div className="text-center">
                 {productStatus === "loading" && (
                   <div className="spinner-border text-danger" role="status">
@@ -255,44 +258,66 @@ const ProductsList = () => {
                       key={product._id}
                     >
                       <a href={`/products/${product.category}/${product._id}`}>
-                        <div className="position-relative">
+                        <div className="position-relative rounded-4">
                           <img
                             src={
                               product.productImageURL ||
                               "https://example.com/default-image"
                             }
-                            className="card-img-top rounded-0"
+                            className="card-img-top rounded-4"
                             alt="card-image"
                           />
                         </div>
                       </a>
-                      <div className="card-body">
+                      <div className="wishlist">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="24"
+                          height="24"
+                          viewBox="0 0 24 24"
+                          className="cursor-pointer"
+                          onClick={() => handleAddToWishlist(product._id)}
+                        >
+                          <g fill="none">
+                            <path
+                              fill={
+                                isProductInWishlist(product._id)
+                                  ? "red"
+                                  : "currentColor"
+                              }
+                              d="M19.071 13.142L13.414 18.8a2 2 0 0 1-2.828 0l-5.657-5.657A5 5 0 1 1 12 6.072a5 5 0 0 1 7.071 7.07"
+                              opacity={
+                                isProductInWishlist(product._id) ? "1" : "0.16"
+                              }
+                            />
+                            <path
+                              stroke={
+                                isProductInWishlist(product._id)
+                                  ? "red"
+                                  : "currentColor"
+                              }
+                              stroke-linecap="round"
+                              stroke-linejoin="round"
+                              stroke-width="2"
+                              d="M19.071 13.142L13.414 18.8a2 2 0 0 1-2.828 0l-5.657-5.657a5 5 0 0 1 7.07-7.071a5 5 0 0 1 7.072 7.071"
+                            />
+                          </g>
+                        </svg>
+                      </div>
+                      {wishlistError && (
+                        <p className="text-danger">{wishlistError}</p>
+                      )}
+                      <div className="card-body px-0 py-4">
                         <a
                           href={`/products/${product.category}/${product._id}`}
                           className="text-decoration-none text-black"
                         >
-                          <h5 className="card-title">{product.title}</h5>
+                          <h5 className="card-title fw-semibold">{product.title}</h5>
                         </a>
                         <p className="card-text fw-bold">₹ {product.price}</p>
-                        <div className="d-flex gap-2">
-                          <button
-                            className="btn btn-primary btn-bg-red cursor-pointer"
-                            onClick={() => handleAddToWishlist(product._id)}
-                            disabled={wishlistStatus === "loading"}
-                          >
-                            {isProductInWishlist(product._id)
-                              ? "In Wishlist"
-                              : wishlistStatus === "loading"
-                              ? "Adding..."
-                              : "Add to Wishlist"}
-                          </button>
-                        </div>
-                        {wishlistError && (
-                          <p className="text-danger">{wishlistError}</p>
-                        )}
                         <div className="d-flex gap-2 mt-2">
                           <button
-                            className="btn btn-primary btn-bg-red cursor-pointer"
+                            className=" btn btn-primary btn-bg-red cursor-pointer rounded-pill"
                             onClick={() => handleAddToCart(product._id)}
                           >
                             Add To Cart

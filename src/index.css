@@ -4,7 +4,9 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif; */
     /* font-family: "Inter", serif !important; */
-    font-family: "Host Grotesk", sans-serif;
+    font-family: "Host Grotesk", sans-serif !important;
+    /* font-family: "Gidole", sans-serif !important; */
+    /* font-family: "Montserrat", sans-serif !important; */
   /* -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale; */
 }
@@ -17,6 +19,9 @@ body {
 /*
  Custom Font Sizes
 */
+h5 {
+  font-family: "Poppins", sans-serif !important;
+}
 .text-xs {
   font-size: 12px;
   line-height: 16px;

@@ -30,7 +30,6 @@ export const removeWishList = createAsyncThunk(
   "wishlist/removeWishlist",
   async ({ wishlistId, productId }, { rejectWithValue, dispatch }) => {
     try {
-      console.log(`Deleting product ${productId} from wishlist ${wishlistId}`);
       const response = await axios.delete(
         `https://shoping-app-backend-iota.vercel.app/wishlist/${wishlistId}/item/${productId}`,
         {
@@ -39,7 +38,6 @@ export const removeWishList = createAsyncThunk(
           },
         }
       );
-      console.log("Delete response:", response.data);
       dispatch(fetchWishlist());
       return productId;
     } catch (error) {

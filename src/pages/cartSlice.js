@@ -9,7 +9,6 @@ export const fetchCart = createAsyncThunk(
       const response = await axios.get(
         "https://shoping-app-backend-iota.vercel.app/cart" // Adjust endpoint as needed
       );
-      console.log("Cart API Response:", response.data);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch cart");

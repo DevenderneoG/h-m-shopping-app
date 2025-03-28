@@ -39,21 +39,36 @@
 .navbar-brand svg {
   height: 40px;
 }
+.searchBar li.nav-item {
+  width: 100%;
+  max-width: 60%;
+  margin: 0 auto;
+}
+.searchBar li.nav-item svg {
+  width: 25px;
+  height: 25px;
+}
 .navbar-brand svg path {
   fill: #e50010;
 }
-
+.card-img {
+  border-radius: 20px;
+}
+.card-Content-Text {
+  border-radius: 0 0 20px 20px;
+}
 .card-Content.card img {
   height: 100%;
   object-fit: cover;
   object-position: top;
+  border-radius: 20px;
 }
 
 .card-Content.card {
   min-height: 500px;
   height: 100%;
   max-height: 500px;
-  border-radius: 0px;
+  border-radius: 20px;
   position: relative;
   overflow: hidden;
 }
@@ -67,6 +82,7 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.1);
+  border-radius: 20px;
 }
 .card-Content-Text {
   position: absolute;
@@ -87,6 +103,8 @@
 .btn-bg-red {
   background-color: #000000 !important;
   border-color: #000 !important;
+  min-height: 45px;
+  min-width: 160px;
 }
 .btn-bg-red:hover {
   background-color: #222 !important;
@@ -102,8 +120,8 @@
   background-color: transparent;
   border-radius: 5px;
   cursor: pointer;
-  width: 40px;
-  height: 40px;
+  width: 45px;
+  height: 45px;
   border: unset;
 }
 .reaction-toggle img {
@@ -144,7 +162,17 @@
   border-style: solid;
 }
 .list-items svg {
-  width: 18px;
+  width: 24px;
+}
+.wishlist {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+}
+.wishlist svg {
+  width: 30px;
+  height: 30px;  
+  cursor: pointer;
 }
 /** Footer **/
 .footer {
@@ -265,6 +293,10 @@ span.wishlistCount {
 .cart-content h3 {
   font-size: 20px;
   font-weight: 400;
+}
+.header-icon svg {
+  width: 25px;
+  height: 25px;
 }
 
 @media all and (max-width: 992px) {
