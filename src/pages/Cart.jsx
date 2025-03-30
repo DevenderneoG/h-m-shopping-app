@@ -1,7 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchCart,
-  addToCart,
   removeFromCart,
   updateCartItem,
 } from "./cartSlice";
@@ -31,17 +30,12 @@ const CartComponent = () => {
     (state) => state.wishlist || { items: [], status: "idle", error: null }
   );
 
-  // Local state to track updating items
   const [updatingItems, setUpdatingItems] = useState({});
 
   useEffect(() => {
     dispatch(fetchCart());
     dispatch(fetchWishlist());
   }, [dispatch]);
-
-  // const handleAddToCart = () => {
-  //   dispatch(addToCart({ productId: "67717253dbfea60f55f6e999", quantity: 1 }));
-  // };
 
   const handleRemoveFromCart = (productId) => {
     if (!cartId) return;
@@ -66,18 +60,13 @@ const CartComponent = () => {
       .catch((err) => {
         toast.error(err);
         if (err === "Cart not found" || err === "Product not found in cart") {
-          dispatch(fetchCart()); // Refresh cart if not found
+          dispatch(fetchCart()); 
         }
       })
       .finally(() => {
         setUpdatingItems((prev) => ({ ...prev, [productId]: false }));
       });
   };
-
-  // const handleAddToWishlist = (productId) => {
-  //   dispatch(addWishList({ productId }));
-  // };
-
 
   const handleAddToWishlist = (productId) => {
       if (isProductInWishlist(productId)) {
@@ -196,6 +185,7 @@ const CartComponent = () => {
                           <img
                             src={item.productId.productImageURL}
                             alt={item.productId.title}
+                            className="rounded-4"
                             onError={(e) =>
                               (e.target.src = "/placeholder-image.jpg")
                             }
@@ -253,7 +243,7 @@ const CartComponent = () => {
                               </span>
                             </p>
                             <button
-                              className="btn btn-primary btn-bg-red cursor-pointer"
+                              className="btn btn-primary btn-bg-red cursor-pointer rounded-pill"
                               onClick={() =>
                                 handleAddToWishlist(item.productId._id)
                               }
@@ -307,7 +297,7 @@ const CartComponent = () => {
                   </p>
                   <a
                     href="./address"
-                    className="btn btn-primary btn-bg-red cursor-pointer"
+                    className="btn btn-primary btn-bg-red cursor-pointer rounded-pill"
                   >
                     Proceed to Buy
                   </a>

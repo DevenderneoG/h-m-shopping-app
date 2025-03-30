@@ -22,41 +22,45 @@ function AddressDetail({
   return (
     <div>
       <h4 className="mb-4">Delivery addresses ({addresses.length})</h4>
-      {addresses.map((addr, index) => (
-        <div className="mb-3" key={addr._id || index}>
-          <div className="d-flex align-items-center">
-            <input
-              type="checkbox"
-              id={`address-${index}`}
-              checked={selectedAddress === index}
-              onChange={() => setSelectedAddress(index)}
-              className="me-2"
-            />
-            <label htmlFor={`address-${index}`} className="mb-0">
-              {addr.fullName} - {addr.address}, {addr.city}, {addr.state}
-            </label>
-          </div>
-          <div>
-            <button
-              type="button"
-              className="btn btn-link btn-sm"
-              onClick={() => onEdit(addr)}
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModal"
-              data-bs-dismiss="modal"
-            >
-              Edit Address
-            </button>
-            <button
-              type="button"
-              className="btn btn-link btn-sm text-danger"
-              onClick={() => onDelete(addr._id)}
-            >
-              Delete Address
-            </button>
-          </div>
-        </div>
-      ))}
+      <ul className="list-group">
+        {addresses.map((addr, index) => (
+          <li className="list-group-item py-3">
+            <div className="" key={addr._id || index}>
+              <div className="d-flex align-items-lg-center align-items-center">
+                <input
+                  type="checkbox"
+                  id={`address-${index}`}
+                  checked={selectedAddress === index}
+                  onChange={() => setSelectedAddress(index)}
+                  className="me-2"
+                />
+                <label htmlFor={`address-${index}`} className="mb-0">
+                  {addr.fullName} - {addr.address}, {addr.city}, {addr.state}
+                </label>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  className="btn btn-link btn-sm ps-0"
+                  onClick={() => onEdit(addr)}
+                  data-bs-toggle="modal"
+                  data-bs-target="#exampleModal"
+                  data-bs-dismiss="modal"
+                >
+                  Edit
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-link btn-sm text-danger"
+                  onClick={() => onDelete(addr._id)}
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -213,16 +217,16 @@ export default function AddressCart() {
                 <div className="mt-3">
                   <button
                     type="button"
-                    className="btn btn-outline-primary me-2 mb-lg-0 mb-3"
+                    className="btn btn-primary btn-bg-red rounded-pill me-2 mb-lg-0 mb-3 px-4"
                     data-bs-toggle="modal"
                     data-bs-target="#exampleModal"
                     onClick={resetForm}
                   >
-                    Add a new delivery address
+                    Add a new address
                   </button>
                   <button
                     type="button"
-                    className="btn btn-primary"
+                    className="btn btn-primary btn-bg-red rounded-pill"
                     onClick={handleProceed}
                     disabled={selectedAddress === null}
                   >

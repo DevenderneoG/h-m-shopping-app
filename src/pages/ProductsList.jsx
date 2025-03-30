@@ -247,7 +247,9 @@ const ProductsList = () => {
                 )}
                 {productError && <p>{productError}</p>}
                 {searchTerm && filteredProducts.length === 0 && (
-                  <p>No products found matching "{searchTerm}"</p>
+                  <p className="text-center">
+                    No products found matching "{searchTerm}"
+                  </p>
                 )}
               </div>
               <div className="d-flex flex-lg-row flex-md-row flex-column flex-wrap gap-1 row-gap-3 product-list mt-lg-0 mt-4">
@@ -298,7 +300,7 @@ const ProductsList = () => {
                               }
                               stroke-linecap="round"
                               stroke-linejoin="round"
-                              stroke-width="2"
+                              strokeWidth="2"
                               d="M19.071 13.142L13.414 18.8a2 2 0 0 1-2.828 0l-5.657-5.657a5 5 0 0 1 7.07-7.071a5 5 0 0 1 7.072 7.071"
                             />
                           </g>
@@ -312,7 +314,9 @@ const ProductsList = () => {
                           href={`/products/${product.category}/${product._id}`}
                           className="text-decoration-none text-black"
                         >
-                          <h5 className="card-title fw-semibold">{product.title}</h5>
+                          <h5 className="card-title fw-semibold">
+                            {product.title}
+                          </h5>
                         </a>
                         <p className="card-text fw-bold">₹ {product.price}</p>
                         <div className="d-flex gap-2 mt-2">
@@ -327,7 +331,9 @@ const ProductsList = () => {
                     </div>
                   ))
                 ) : (
-                  <p className="text-center d-block">No products found</p>
+                  <div className="text-center">
+                    <p className="text-center d-block">No products found</p>
+                  </div>
                 )}
               </div>
             </div>

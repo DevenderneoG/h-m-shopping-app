@@ -111,7 +111,7 @@ const Wishlist = () => {
                           group.product.productImageURL ||
                           "https://example.com/default-image"
                         }
-                        className="card-img-top rounded-0"
+                        className="card-img-top rounded-4"
                         alt={group.product.title || "Product"}
                       />
                     </a>
