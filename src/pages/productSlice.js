@@ -1,20 +1,15 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Fetch Products
 export const fetchProducts = createAsyncThunk("products/fetchProducts", async () => {
   const response = await axios.get("https://shoping-app-backend-iota.vercel.app/products");
   return response.data;
 });
 
-// Fetch Categories
 export const fetchCategories = createAsyncThunk("products/fetchCategories", async () => {
   const response = await axios.get("https://shoping-app-backend-iota.vercel.app/categories");
-  // console.log(response.data);
   return response.data.categories;
 });
-
-//fetch products  
 
 export const fetchProductsDetails = createAsyncThunk("products/fetchProductDetails", async (productId) => {
   const response = await axios.get(`https://shoping-app-backend-iota.vercel.app/products/${productId}`);
@@ -38,8 +33,7 @@ export const productSlice = createSlice({
     setSelectedCategories: (state, action) => {
       state.selectedCategories = action.payload;
     
-      // Update filtered products
-      state.filteredProducts =
+     state.filteredProducts =
         action.payload.length === 0
           ? state.products
           : state.products.filter((product) =>

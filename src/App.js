@@ -1,9 +1,6 @@
 import "./App.css";
-
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min";
-
-// Import Swiper styles
 import "swiper/css";
 import "swiper/css/pagination";
 import ProductSlider from "./components/ProductSlider";
@@ -14,7 +11,6 @@ function App() {
   return (
     <div className="App">
       <Header />
-      {/* <AddressCart/> */}
       <ProductSlider />
       <div className="container-fluid py-lg-5 py-3">
         <div className="row">
@@ -33,64 +29,64 @@ function App() {
         <div className="row gy-lg-0 gy-4">
           <div className="col-md-4">
             <div className="position-relative">
-              <div className="">
+              <div className="rounded-4">
                 <img
                   src="https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fe7%2F9c%2Fe79c3a401e23c744f1df72e9f021821648e873ab.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B2%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D"
                   alt="logo"
-                  className="w-100 img-fluid"
+                  className="w-100 img-fluid rounded-4"
                 />
               </div>
               <div className="position-absolute bottom-0 start-0 end-0 z-index-1 p-5 text-start">
                 <p className="text-white mb-0">Your Exclusive Access</p>
                 <h2 className="text-white mb-4">New arrivals Mens</h2>
-                <button
-                  type="button"
+                <a
+                  href="/products/categories/men"
                   className="btn btn-primary rounded-pill px-3 btn-bg-red"
                 >
                   Shop
-                </button>
+                </a>
               </div>
             </div>
           </div>
           <div className="col-md-4">
             <div className="position-relative">
-              <div className="">
+              <div className="rounded-4">
                 <img
                   src="https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F13%2Ffd%2F13fdf70d974215c7a600b5c38738b10b3f07c20c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]"
                   alt="logo"
-                  className="w-100 img-fluid"
+                  className="w-100 img-fluid rounded-4"
                 />
               </div>
               <div className="position-absolute bottom-0 start-0 end-0 z-index-1 p-5 text-start">
                 <p className="text-white mb-0">Your Exclusive Access</p>
                 <h2 className="text-white mb-4">New arrivals Womens</h2>
-                <button
-                  type="button"
+                <a
+                 href="/products/categories/women"
                   className="btn btn-primary rounded-pill px-3 btn-bg-red"
                 >
                   Shop
-                </button>
+                </a>
               </div>
             </div>
           </div>
           <div className="col-md-4">
             <div className="position-relative">
-              <div className="">
+              <div className="rounded-4">
                 <img
                   src="https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F47%2F3b%2F473b950f11f1aa374fbaf7d11e500d095a3310eb.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]"
                   alt="logo"
-                  className="w-100 img-fluid"
+                  className="w-100 img-fluid rounded-4"
                 />
               </div>
               <div className="position-absolute bottom-0 start-0 end-0 z-index-1 p-5 text-start">
                 <p className="text-white mb-0">Your Exclusive Access</p>
-                <h2 className="text-white mb-4">New arrivals Mens</h2>
-                <button
-                  type="button"
+                <h2 className="text-white mb-4">New arrivals Kids</h2>
+                <a
+                  href="/products/categories/kids"
                   className="btn btn-primary rounded-pill px-3 btn-bg-red"
                 >
                   Shop
-                </button>
+                </a>
               </div>
             </div>
           </div>

@@ -5,8 +5,10 @@ export const fetchWishlist = createAsyncThunk(
   "wishlist/fetchWishlist",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await axios.get("https://shoping-app-backend-iota.vercel.app/wishlist");
-      return response.data; // Return the full response data
+      const response = await axios.get(
+        "https://shoping-app-backend-iota.vercel.app/wishlist"
+      );
+      return response.data;
     } catch (error) {
       return rejectWithValue(error.message || "Failed to fetch wishlist");
     }
@@ -17,7 +19,10 @@ export const addWishList = createAsyncThunk(
   "wishlist/addWishlistAsync",
   async ({ productId }, { rejectWithValue, dispatch }) => {
     try {
-      const response = await axios.post("https://shoping-app-backend-iota.vercel.app/wishlist", { productId });
+      const response = await axios.post(
+        "https://shoping-app-backend-iota.vercel.app/wishlist",
+        { productId }
+      );
       dispatch(fetchWishlist());
       return response.data;
     } catch (error) {
@@ -30,21 +35,21 @@ export const removeWishList = createAsyncThunk(
   "wishlist/removeWishlist",
   async ({ wishlistId, productId }, { rejectWithValue, dispatch }) => {
     try {
-      console.log(`Deleting product ${productId} from wishlist ${wishlistId}`);
       const response = await axios.delete(
         `https://shoping-app-backend-iota.vercel.app/wishlist/${wishlistId}/item/${productId}`,
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // Replace with your token retrieval logic
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      console.log("Delete response:", response.data);
       dispatch(fetchWishlist());
       return productId;
     } catch (error) {
       const errorMessage =
-        error.response?.data?.error || error.message || "Failed to remove from wishlist";
+        error.response?.data?.error ||
+        error.message ||
+        "Failed to remove from wishlist";
       console.error("Remove wishlist error:", errorMessage);
       return rejectWithValue(errorMessage);
     }
@@ -55,7 +60,7 @@ const initialState = {
   items: [],
   status: "idle",
   error: null,
-  wishlistId: null, // Add wishlistId to state
+  wishlistId: null,
 };
 
 const wishlistSlice = createSlice({
@@ -70,8 +75,10 @@ const wishlistSlice = createSlice({
       })
       .addCase(fetchWishlist.fulfilled, (state, action) => {
         state.status = "succeeded";
-        state.items = Array.isArray(action.payload.items) ? action.payload.items : [];
-        state.wishlistId = action.payload._id || null; // Store wishlistId from response
+        state.items = Array.isArray(action.payload.items)
+          ? action.payload.items
+          : [];
+        state.wishlistId = action.payload._id || null;
       })
       .addCase(fetchWishlist.rejected, (state, action) => {
         state.status = "failed";
@@ -95,7 +102,7 @@ const wishlistSlice = createSlice({
       .addCase(removeWishList.fulfilled, (state, action) => {
         state.status = "succeeded";
         const itemId = action.payload;
-        state.items = state.items.filter((item) => item._id !== itemId); // Optimistic update
+        state.items = state.items.filter((item) => item._id !== itemId);
       })
       .addCase(removeWishList.rejected, (state, action) => {
         state.status = "failed";
