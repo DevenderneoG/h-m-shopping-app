@@ -1,7 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Fetch Address
 export const fetchAddress = createAsyncThunk(
   "address/fetchAddress",
   async () => {
@@ -12,7 +11,6 @@ export const fetchAddress = createAsyncThunk(
   }
 );
 
-// Add Address
 export const addAddress = createAsyncThunk(
   "address/addAddress",
   async (addressData, { rejectWithValue }) => {
@@ -28,7 +26,6 @@ export const addAddress = createAsyncThunk(
   }
 );
 
-// Update an existing address
 export const updateAddress = createAsyncThunk(
   "address/updateAddress",
   async ({ id, addressData }, { rejectWithValue }) => {
@@ -44,7 +41,6 @@ export const updateAddress = createAsyncThunk(
   }
 );
 
-// Remove item from cart
 export const removeAddress = createAsyncThunk(
   "address/removeAddress",
   async ({ id }, { rejectWithValue, dispatch }) => {
@@ -81,7 +77,7 @@ export const addressSlice = createSlice({
         state.status = "failed";
         state.error = action.error.message;
       })
-      // Add Address Cases
+
       .addCase(addAddress.pending, (state) => {
         state.status = "loading";
       })
@@ -93,7 +89,7 @@ export const addressSlice = createSlice({
         state.status = "failed";
         state.error = action.payload || action.error.message;
       })
-      // Update Address Cases
+      
       .addCase(updateAddress.fulfilled, (state, action) => {
         const index = state.address.findIndex(
           (addr) => addr._id === action.payload._id

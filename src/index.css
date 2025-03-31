@@ -1,27 +1,8 @@
 body {
   margin: 0;
-  /* font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif; */
-    /* font-family: "Inter", serif !important; */
-    font-family: "Host Grotesk", sans-serif !important;
-    /* font-family: "Gidole", sans-serif !important; */
-    /* font-family: "Montserrat", sans-serif !important; */
-  /* -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale; */
+  font-family: "Host Grotesk", sans-serif !important;
 }
 
-/* code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
-} */
-
-/*
- Custom Font Sizes
-*/
-h5 {
-  font-family: "Poppins", sans-serif !important;
-}
 .text-xs {
   font-size: 12px;
   line-height: 16px;
@@ -64,27 +45,27 @@ h5 {
 
 .text-5xl {
   font-size: 48px;
-  line-height: 60px; /* Unitless 1 becomes equal to font-size */
+  line-height: 60px;
 }
 
 .text-6xl {
   font-size: 60px;
-  line-height: 60px; /* Unitless 1 becomes equal to font-size */
+  line-height: 60px;
 }
 
 .text-7xl {
   font-size: 72px;
-  line-height: 72px; /* Unitless 1 becomes equal to font-size */
+  line-height: 72px;
 }
 
 .text-8xl {
   font-size: 96px;
-  line-height: 96px; /* Unitless 1 becomes equal to font-size */
+  line-height: 96px;
 }
 
 .text-9xl {
   font-size: 128px;
-  line-height: 128px; /* Unitless 1 becomes equal to font-size */
+  line-height: 128px;
 }
 .fw-medium {
   font-weight: 500;

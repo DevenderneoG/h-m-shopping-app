@@ -42,10 +42,6 @@ const ProductDetails = () => {
     }
   };
 
-  // const discount = 50;
-  // const discountPrice =
-  //   selectedProduct?.price - (selectedProduct?.price * discount) / 100;
-
   const discount = selectedProduct?.discount || 0;
   const discountPrice = selectedProduct?.price
     ? selectedProduct.price - (selectedProduct.price * discount) / 100
@@ -141,8 +137,8 @@ const ProductDetails = () => {
       <ToastContainer position="top-right" autoClose={3000} />
       <section className="py-5">
         <div className="container">
-          <div className="row">
-            <div className="col-lg-5">
+          <div className="row gx-lg-5 gx-4">
+            <div className="col-lg-5 col-md-6">
               {selectedProduct && (
                 <div
                   className="card border-0 rounded-0 product-card mb-lg-0 mb-4"
@@ -161,7 +157,7 @@ const ProductDetails = () => {
                 </div>
               )}
             </div>
-            <div className="col-lg-7">
+            <div className="col-lg-7 col-md-6">
               <div>
                 <h2>{selectedProduct.title}</h2>
                 <p className="fs-4 fw-bold">
@@ -244,13 +240,13 @@ const ProductDetails = () => {
                 </div>
                 <div className="mb-5 d-flex flex-lg-row flex-column align-content-center gap-3">
                   <button
-                    className="btn btn-primary btn-bg-red cursor-pointer"
+                    className="btn btn-primary btn-bg-red cursor-pointer rounded-pill"
                     onClick={handleAddToCart}
                   >
                     Add to Cart
                   </button>
                   <button
-                    className="btn btn-outline-info cursor-pointer"
+                    className="btn btn-outline-info cursor-pointer rounded-pill px-4"
                     onClick={handleAddToWishlist}
                     disabled={wishlistStatus === "loading"}
                   >

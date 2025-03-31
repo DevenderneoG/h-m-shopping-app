@@ -252,11 +252,11 @@ const ProductsList = () => {
                   </p>
                 )}
               </div>
-              <div className="d-flex flex-lg-row flex-md-row flex-column flex-wrap gap-1 row-gap-3 product-list mt-lg-0 mt-4">
+              <div className="d-flex flex-lg-row flex-md-row flex-column flex-wrap gap-lg-1 gap-md-2  row-gap-3 product-list mt-lg-0 mt-4">
                 {sortedProducts.length > 0 ? (
                   sortedProducts.map((product) => (
                     <div
-                      className="card border-0 rounded-0 product-card"
+                      className="card border-0 rounded-0 product-card product-list-card"
                       key={product._id}
                     >
                       <a href={`/products/${product.category}/${product._id}`}>

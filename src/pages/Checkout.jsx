@@ -28,16 +28,15 @@ export default function Checkout() {
     dispatch(fetchCart());
   }, [dispatch]);
 
-  const discount = 50;
-
-  const calculateDiscountedPrice = (price) => {
-    return price - (price * discount) / 100;
+  const calculateDiscountedPrice = (price, discount = 0) => {
+    return discount > 0 ? price - (price * discount) / 100 : price;
   };
 
-  const calculateItemTotal = (price, quantity) => {
+  const calculateItemTotal = (price, quantity, discount = 0) => {
+    const discountedPrice = calculateDiscountedPrice(price, discount);
     return {
       original: price * quantity,
-      discounted: calculateDiscountedPrice(price) * quantity,
+      discounted: discountedPrice * quantity,
     };
   };
 
@@ -49,7 +48,11 @@ export default function Checkout() {
     const totalDiscounted = items.reduce(
       (sum, item) =>
         sum +
-        calculateDiscountedPrice(item.productId?.price || 0) * item.quantity,
+        calculateDiscountedPrice(
+          item.productId?.price || 0,
+          item.productId?.discount || 0
+        ) *
+          item.quantity,
       0
     );
     return { totalOriginal, totalDiscounted };
@@ -73,10 +76,10 @@ export default function Checkout() {
       <Header />
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="container py-5">
-        <div className="row">
+        <div className="row g-4">
           <div className="col-lg-8">
             <div className="card p-4 mb-4">
-              <ul className="list-unstyled mb-0 product-list">
+              <ul className="list-unstyled mb-0 product-list checkout-list">
                 {items.map((item) => {
                   if (!item.productId || !item.productId.price) {
                     return (
@@ -86,18 +89,17 @@ export default function Checkout() {
                     );
                   }
 
-                  const discountedPrice = calculateDiscountedPrice(
-                    item.productId.price
-                  );
+                  const discount = item.productId.discount || 0;
                   const itemTotal = calculateItemTotal(
                     item.productId.price,
-                    item.quantity
+                    item.quantity,
+                    discount
                   );
                   const isUpdating = updatingItems[item.productId._id];
 
                   return (
                     <li key={item._id}>
-                      <div className="d-flex product-card gap-4 mb-4">
+                      <div className="d-flex product-card checkout-card gap-4 mb-4 pb-4 border-bottom">
                         <div className="product-card-img">
                           <img
                             className="rounded-4"
@@ -111,22 +113,17 @@ export default function Checkout() {
                         <div className="d-flex align-items-start justify-content-between flex-grow-1 cart-content">
                           <div>
                             <h3>{item.productId.title}</h3>
-                            <p>
+                            <p className="mb-0">
                               <span className="fs-4 fw-bolder">
-                                ₹{discountedPrice.toFixed(2)}
-                              </span>{" "}
-                              <span className="fs-4 text-black-50 ms-3">
-                                <del>₹{item.productId.price}</del>
-                              </span>
-                            </p>
-                            <p>
-                              Item Total:
-                              <span className="fw-bold ms-2">
                                 ₹{itemTotal.discounted.toFixed(2)}
-                              </span>
-                              <span className="text-black-50 ms-2">
-                                <del>₹{itemTotal.original.toFixed(2)}</del>
-                              </span>
+                              </span>{" "}
+                            </p>
+                            <p className="mb-0">{item.description}</p>
+                            <p>
+                              <span className="fs-5">
+                                <b>Quantity: </b>
+                                {item.quantity}
+                              </span>{" "}
                             </p>
                           </div>
                         </div>
@@ -138,9 +135,11 @@ export default function Checkout() {
             </div>
             <div className="card p-4">
               <h4>Delivery Address:</h4>
+              <hr />
+              <h5 className="fw-semibold">{selectedAddress.fullName}</h5>
               <p className="mb-0">
-                {selectedAddress.fullName} - {selectedAddress.address},{" "}
-                {selectedAddress.city}, {selectedAddress.state}
+                {selectedAddress.address}, {selectedAddress.city},{" "}
+                {selectedAddress.state}
               </p>
             </div>
           </div>
@@ -148,7 +147,7 @@ export default function Checkout() {
             <div className="col-lg-4">
               <div className="card">
                 <div className="card-body">
-                  <h5>Cart Summary</h5>
+                  <h4 className="fw-semibold">Cart Summary</h4>
                   <hr />
                   <p>Original Total: ₹{totalOriginal.toFixed(2)}</p>
                   <p>Discounted Total: ₹{totalDiscounted.toFixed(2)}</p>
@@ -157,7 +156,7 @@ export default function Checkout() {
                   </p>
                   <button
                     className="btn btn-primary btn-bg-red cursor-pointer rounded-pill"
-                    onClick={handleCheckout} 
+                    onClick={handleCheckout}
                   >
                     Place Order
                   </button>

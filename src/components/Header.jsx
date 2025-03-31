@@ -46,7 +46,7 @@ const Header = () => {
   return (
     <>
       <nav className="navbar navbar-expand-lg bg-white sticky-top shadow">
-        <div className="container-fluid px-lg-5 px-4">
+        <div className="container-fluid px-lg-5 px-md-5 px-4">
           <a className="navbar-brand" href="/">
             <svg
               className="__2OnJ __2utV PH_l"

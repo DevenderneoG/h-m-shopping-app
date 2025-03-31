@@ -1,9 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchCart,
-  removeFromCart,
-  updateCartItem,
-} from "./cartSlice";
+import { fetchCart, removeFromCart, updateCartItem } from "./cartSlice";
 import { fetchWishlist, addWishList } from "./wishlistSlice";
 import { useEffect, useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -40,10 +36,10 @@ const CartComponent = () => {
   const handleRemoveFromCart = (productId) => {
     if (!cartId) return;
     dispatch(removeFromCart({ cartId, productId }))
-    .then(() => toast.success("Product Removed successfully"))
+      .then(() => toast.success("Product Removed successfully"))
       .catch((err) => {
-        toast.error("Product Failed Removed", err);        
-      })
+        toast.error("Product Failed Removed", err);
+      });
   };
 
   const handleQuantityChange = (productId, newQuantity) => {
@@ -60,7 +56,7 @@ const CartComponent = () => {
       .catch((err) => {
         toast.error(err);
         if (err === "Cart not found" || err === "Product not found in cart") {
-          dispatch(fetchCart()); 
+          dispatch(fetchCart());
         }
       })
       .finally(() => {
@@ -69,39 +65,38 @@ const CartComponent = () => {
   };
 
   const handleAddToWishlist = (productId) => {
-      if (isProductInWishlist(productId)) {
-        toast.info("Product already in wishlist!", {
+    if (isProductInWishlist(productId)) {
+      toast.info("Product already in wishlist!", {
+        position: "top-right",
+        autoClose: 3000,
+      });
+      return;
+    }
+
+    dispatch(addWishList({ productId })).then((result) => {
+      if (result.meta.requestStatus === "fulfilled") {
+        toast.success("Product added to wishlist successfully!", {
           position: "top-right",
           autoClose: 3000,
         });
-        return;
+      } else if (result.meta.requestStatus === "rejected") {
+        toast.error("Failed to add product to wishlist!", {
+          position: "top-right",
+          autoClose: 3000,
+        });
       }
-  
-      dispatch(addWishList({ productId })).then((result) => {
-        if (result.meta.requestStatus === "fulfilled") {
-          toast.success("Product added to wishlist successfully!", {
-            position: "top-right",
-            autoClose: 3000,
-          });
-        } else if (result.meta.requestStatus === "rejected") {
-          toast.error("Failed to add product to wishlist!", {
-            position: "top-right",
-            autoClose: 3000,
-          });
-        }
-      });
-    };
-
-  const discount = 50;
-
-  const calculateDiscountedPrice = (price) => {
-    return price - (price * discount) / 100;
+    });
   };
 
-  const calculateItemTotal = (price, quantity) => {
+  const calculateDiscountedPrice = (price, discount = 0) => {
+    return discount > 0 ? price - (price * discount) / 100 : price;
+  };
+
+  const calculateItemTotal = (price, quantity, discount = 0) => {
+    const discountedPrice = calculateDiscountedPrice(price, discount);
     return {
       original: price * quantity,
-      discounted: calculateDiscountedPrice(price) * quantity,
+      discounted: discountedPrice * quantity,
     };
   };
 
@@ -113,7 +108,11 @@ const CartComponent = () => {
     const totalDiscounted = items.reduce(
       (sum, item) =>
         sum +
-        calculateDiscountedPrice(item.productId?.price || 0) * item.quantity,
+        calculateDiscountedPrice(
+          item.productId?.price || 0,
+          item.productId?.discount || 0
+        ) *
+          item.quantity,
       0
     );
     return { totalOriginal, totalDiscounted };
@@ -134,10 +133,7 @@ const CartComponent = () => {
       <ToastContainer position="top-right" autoClose={3000} />
       <div className="text-center">
         {status === "loading" && (
-          <div
-            className="spinner-border text-danger mt-4"
-            role="status"
-          >
+          <div className="spinner-border text-danger mt-4" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         )}
@@ -158,7 +154,7 @@ const CartComponent = () => {
       <div className="container py-5">
         <div className="row">
           <div className="col-lg-8">
-            <div className="card p-4">
+            <div className="card p-4 mb-lg-0 mb-4">
               <ul className="list-unstyled mb-0 product-list">
                 {items.map((item) => {
                   if (!item.productId || !item.productId.price) {
@@ -168,19 +164,21 @@ const CartComponent = () => {
                       </li>
                     );
                   }
-
+                  const discount = item.productId.discount || 0;
                   const discountedPrice = calculateDiscountedPrice(
-                    item.productId.price
+                    item.productId.price,
+                    discount
                   );
                   const itemTotal = calculateItemTotal(
                     item.productId.price,
-                    item.quantity
+                    item.quantity,
+                    discount
                   );
                   const isUpdating = updatingItems[item.productId._id];
 
                   return (
                     <li key={item._id}>
-                      <div className="d-flex product-card gap-4 mb-4">
+                      <div className="d-flex product-card cart-list gap-4 mb-4">
                         <div className="product-card-img">
                           <img
                             src={item.productId.productImageURL}
@@ -194,13 +192,20 @@ const CartComponent = () => {
                         <div className="d-flex align-items-start justify-content-between flex-grow-1 cart-content">
                           <div>
                             <h3>{item.productId.title}</h3>
-                            <p>
+                            <p className="d-flex align-items-center">
                               <span className="fs-4 fw-bolder">
                                 ₹{discountedPrice.toFixed(2)}
                               </span>{" "}
-                              <span className="fs-4 text-black-50 ms-3">
-                                <del>₹{item.productId.price}</del>
-                              </span>
+                              {discount > 0 && (
+                                <span className="fs-4 text-black-50 ms-2">
+                                  <del>₹{item.productId.price}</del>
+                                </span>
+                              )}
+                              {discount > 0 && (
+                                <span className="ms-2 text-success">
+                                  ({discount}% off)
+                                </span>
+                              )}
                             </p>
                             <div className="d-flex align-items-center gap-2 mb-2">
                               <button
@@ -238,23 +243,27 @@ const CartComponent = () => {
                               <span className="fw-bold ms-2">
                                 ₹{itemTotal.discounted.toFixed(2)}
                               </span>
-                              <span className="text-black-50 ms-2">
-                                <del>₹{itemTotal.original.toFixed(2)}</del>
-                              </span>
+                              {discount > 0 && (
+                                <span className="text-black-50 ms-2">
+                                  <del>₹{itemTotal.original.toFixed(2)}</del>
+                                </span>
+                              )}
                             </p>
-                            <button
-                              className="btn btn-primary btn-bg-red cursor-pointer rounded-pill"
-                              onClick={() =>
-                                handleAddToWishlist(item.productId._id)
-                              }
-                              disabled={wishlistStatus === "loading"}
-                            >
-                              {isProductInWishlist(item.productId._id)
-                                ? "In Wishlist"
-                                : wishlistStatus === "loading"
-                                ? "Adding..."
-                                : "Add to Wishlist"}
-                            </button>
+                            <div>
+                              <button
+                                className="btn btn-primary btn-bg-red cursor-pointer rounded-pill"
+                                onClick={() =>
+                                  handleAddToWishlist(item.productId._id)
+                                }
+                                disabled={wishlistStatus === "loading"}
+                              >
+                                {isProductInWishlist(item.productId._id)
+                                  ? "In Wishlist"
+                                  : wishlistStatus === "loading"
+                                  ? "Adding..."
+                                  : "Add to Wishlist"}
+                              </button>
+                            </div>
                           </div>
                           <div
                             className="deletebtn"
@@ -292,9 +301,12 @@ const CartComponent = () => {
                   <hr />
                   <p>Original Total: ₹{totalOriginal.toFixed(2)}</p>
                   <p>Discounted Total: ₹{totalDiscounted.toFixed(2)}</p>
-                  <p>
-                    Savings: ₹{(totalOriginal - totalDiscounted).toFixed(2)}
-                  </p>
+                  {totalOriginal > totalDiscounted && (
+                    <p>
+                      Savings: ₹{(totalOriginal - totalDiscounted).toFixed(2)}
+                    </p>
+                  )}
+
                   <a
                     href="./address"
                     className="btn btn-primary btn-bg-red cursor-pointer rounded-pill"

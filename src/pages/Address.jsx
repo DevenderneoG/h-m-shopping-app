@@ -271,6 +271,7 @@ export default function AddressCart() {
                     id="name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
+                    placeholder="Enter your name"
                     required
                   />
                 </div>
@@ -283,9 +284,17 @@ export default function AddressCart() {
                     className="form-control"
                     id="number"
                     value={number}
-                    onChange={(e) => setNumber(e.target.value)}
+                    onChange={(e) => {
+                      const inputValue = e.target.value;
+                      if (/^\d{0,10}$/.test(inputValue)) {
+                        setNumber(inputValue);
+                      }
+                    }}
+                    maxLength={10}
+                    pattern="[0-9]{10}"
+                    placeholder="Enter 10-digit phone number"
                     required
-                  />
+                  />                  
                 </div>
                 <div className="mb-3">
                   <label htmlFor="address" className="form-label">
@@ -297,6 +306,7 @@ export default function AddressCart() {
                     id="address"
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
+                    placeholder="47 W 13th St"
                     required
                   />
                 </div>
@@ -310,6 +320,7 @@ export default function AddressCart() {
                     id="landmark"
                     value={landmark}
                     onChange={(e) => setLandmark(e.target.value)}
+                    placeholder="Cooper Square"
                     required
                   />
                 </div>
@@ -324,6 +335,7 @@ export default function AddressCart() {
                       id="city"
                       value={city}
                       onChange={(e) => setCity(e.target.value)}
+                      placeholder="New York"
                     />
                   </div>
                   <div className="mb-3">
@@ -336,11 +348,15 @@ export default function AddressCart() {
                       id="state"
                       value={state}
                       onChange={(e) => setState(e.target.value)}
+                      placeholder="USA"
                       required
                     />
                   </div>
                 </div>
-                <button type="submit" className="btn btn-primary">
+                <button
+                  type="submit"
+                  className="btn btn-primary btn-bg-red rounded-pill"
+                >
                   {editingAddress ? "Update Address" : "Use This Address"}
                 </button>
               </form>

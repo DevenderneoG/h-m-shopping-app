@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   fetchWishlist,
-  addWishList,
   removeWishList,
 } from "../pages/wishlistSlice";
 import { addToCart } from "./cartSlice";
@@ -42,14 +41,7 @@ const Wishlist = () => {
       }, {})
     : {};
 
-  const uniqueWishlistItems = Object.values(groupedWishlist);
-
-  // const handleAddToWishlist = (productId) => {
-  //   dispatch(addWishList({ productId }))
-  //     .unwrap()
-  //     .then(() => console.log("Added successfully"))
-  //     .catch((err) => console.error("Add failed:", err));
-  // };
+  const uniqueWishlistItems = Object.values(groupedWishlist);  
 
   const handleRemoveFromWishlist = (productId) => {
     if (!wishlistId) {
@@ -82,7 +74,7 @@ const Wishlist = () => {
     <>
       <Header />
       <ToastContainer position="top-right" autoClose={3000} />
-      <div className="container-fluid py-5 overflow-hidden">
+      <div className="container py-5 overflow-hidden">
         <div className="row">
           <div className="col-lg-12">
             <h2 className="mb-4 text-center fw-bolder">Your Wishlist</h2>
@@ -96,11 +88,11 @@ const Wishlist = () => {
             {wishlistError && (
               <p className="text-danger text-center">{wishlistError}</p>
             )}
-            <div className="d-grid gap-1 row-gap-3 product-list">
+            <div className="d-grid gap-3 row-gap-3 product-list wishlist-list">
               {uniqueWishlistItems.length > 0 ? (
                 uniqueWishlistItems.map((group) => (
                   <div
-                    className="card border-0 rounded-0 product-card"
+                    className="card border-0 rounded-0"
                     key={group.product._id}
                   >
                     <a
@@ -128,21 +120,23 @@ const Wishlist = () => {
                         ₹ {group.product.price || "N/A"}
                       </p>
                       <p className="card-text">Quantity: {group.quantity}</p>
-                      <button
-                        className="btn btn-primary btn-bg-red cursor-pointer mb-lg-0 mb-3"
-                        onClick={() => handleAddToCart(group.product._id)}
-                      >
-                        Add To Cart
-                      </button>
-                      <button
-                        className="btn btn-danger ms-lg-2"
-                        onClick={() =>
-                          handleRemoveFromWishlist(group.product._id)
-                        }
-                        disabled={wishlistStatus === "loading"}
-                      >
-                        Remove
-                      </button>
+                      <div className="d-flex align-center flex-lg-nowrap flex-md-nowrap flex-wrap">
+                        <button
+                          className="btn btn-primary btn-bg-red cursor-pointer mb-lg-0 mb-md-0 mb-3 rounded-pill w-100"
+                          onClick={() => handleAddToCart(group.product._id)}
+                        >
+                          Add To Cart
+                        </button>
+                        <button
+                          className="btn btn-danger rounded-pill ms-lg-2 ms-md-2  btn-delete w-100"
+                          onClick={() =>
+                            handleRemoveFromWishlist(group.product._id)
+                          }
+                          disabled={wishlistStatus === "loading"}
+                        >
+                          Remove
+                        </button>
+                      </div>
                     </div>
                   </div>
                 ))
