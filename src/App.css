@@ -311,6 +311,12 @@ span.wishlistCount {
 .btn-delete {
   min-height: 45px;
 }
+
+.wishlist-list .card h5.card-title {
+  min-height: 45px;
+}
+
+
 @media all and (max-width: 992px) {
   .product-list .card img {
     max-width: 100%;
