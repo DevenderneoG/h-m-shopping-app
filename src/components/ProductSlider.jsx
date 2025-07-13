@@ -62,7 +62,7 @@ const ProductSlider = () => {
                         )}
                         {category === "kids" && (
                           <img
-                            src="https://image.hm.com/assets/hm/41/04/4104d8adc785db7b214f9b058f83b5db35c09378.jpg?imwidth=564"
+                            src="https://res.cloudinary.com/doctl427o/image/upload/v1735927328/kids-1_yzqfa5.jpg"
                             alt="Kids Category"
                             className="img-fluid"
                           />

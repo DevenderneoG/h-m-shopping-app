@@ -31,7 +31,7 @@ function App() {
             <div className="position-relative">
               <div className="rounded-4">
                 <img
-                  src="https://lp2.hm.com/hmgoepprod?set=format%5Bwebp%5D%2Cquality%5B79%5D%2Csource%5B%2Fe7%2F9c%2Fe79c3a401e23c744f1df72e9f021821648e873ab.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B2%5D&call=url%5Bfile%3A%2Fproduct%2Fmain%5D"
+                  src="https://res.cloudinary.com/doctl427o/image/upload/v1735487367/regular-fit-overshirt_l4a87x.avif"
                   alt="logo"
                   className="w-100 img-fluid rounded-4"
                 />
@@ -52,7 +52,7 @@ function App() {
             <div className="position-relative">
               <div className="rounded-4">
                 <img
-                  src="https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F13%2Ffd%2F13fdf70d974215c7a600b5c38738b10b3f07c20c.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]"
+                  src="https://res.cloudinary.com/doctl427o/image/upload/v1735489967/wide-high-jeans_cjr1mc.avif"
                   alt="logo"
                   className="w-100 img-fluid rounded-4"
                 />
@@ -73,7 +73,7 @@ function App() {
             <div className="position-relative">
               <div className="rounded-4">
                 <img
-                  src="https://lp2.hm.com/hmgoepprod?set=quality%5B79%5D%2Csource%5B%2F47%2F3b%2F473b950f11f1aa374fbaf7d11e500d095a3310eb.jpg%5D%2Corigin%5Bdam%5D%2Ccategory%5B%5D%2Ctype%5BLOOKBOOK%5D%2Cres%5Bm%5D%2Chmver%5B1%5D&call=url[file:/product/main]"
+                  src="https://res.cloudinary.com/doctl427o/image/upload/v1735927329/kids-4_gueyx4.jpg"
                   alt="logo"
                   className="w-100 img-fluid rounded-4"
                 />
